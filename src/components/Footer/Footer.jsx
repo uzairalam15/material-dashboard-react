@@ -12,11 +12,8 @@ function Footer({ ...props }) {
   return (
     <footer className={classes.footer}>
       <div className={classes.container}>
-        <p className={classes.left}>
-          <span>
-            &copy; {1900 + new Date().getYear()}{" "}
-              Demo Dashboard
-          </span>
+        <p style={{ textAlign: "center" }}>
+          <span>&copy; {1900 + new Date().getYear()} SFMEA Dashboard</span>
         </p>
       </div>
     </footer>

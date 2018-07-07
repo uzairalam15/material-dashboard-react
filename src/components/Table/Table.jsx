@@ -32,19 +32,21 @@ function CustomTable({ ...props }) {
           </TableHead>
         ) : null}
         <TableBody>
-          {tableData.map((prop, key) => {
-            return (
-              <TableRow key={key}>
-                {prop.map((prop, key) => {
-                  return (
-                    <TableCell className={classes.tableCell} key={key}>
-                      {prop}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            );
-          })}
+          {!props.customRows
+            ? tableData.map((prop, key) => {
+                return (
+                  <TableRow key={key}>
+                    {prop.map((prop, key) => {
+                      return (
+                        <TableCell className={classes.tableCell} key={key}>
+                          {prop}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })
+            : props.customRows}
         </TableBody>
       </Table>
     </div>

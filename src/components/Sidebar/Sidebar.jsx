@@ -15,25 +15,29 @@ import HeaderLinks from "components/Header/HeaderLinks.jsx";
 
 import sidebarStyle from "assets/jss/material-dashboard-react/components/sidebarStyle.jsx";
 
-const Sidebar = ({ ...props }) => {
-  // verifies if routeName is the one active (in browser input)
-  function activeRoute(routeName) {
-    return props.location.pathname.indexOf(routeName) > -1 ? true : false;
+class Sidebar extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {};
   }
-  const { classes, color, logo, image, logoText, routes } = props;
-  var links = (
-    <List className={classes.list}>
-      {routes.map((prop, key) => {
-        if (prop.redirect) return null;
+  // verifies if routeName is the one active (in browser input)
+  activeRoute = routeName => {
+    return this.props.location.pathname.indexOf(routeName) > -1 ? true : false;
+  };
+
+  getItems = (classes, color, routes) => {
+    const items = [];
+    routes.forEach((prop, key) => {
+      if (!(prop.redirect || prop.nosidebar)) {
         var activePro = " ";
         var listItemClasses;
         listItemClasses = classNames({
-          [" " + classes[color]]: activeRoute(prop.path)
+          [" " + classes[color]]: this.activeRoute(prop.path)
         });
         const whiteFontClasses = classNames({
-          [" " + classes.whiteFont]: activeRoute(prop.path)
+          [" " + classes.whiteFont]: this.activeRoute(prop.path)
         });
-        return (
+        items.push(
           <NavLink
             to={prop.path}
             className={activePro + classes.item}
@@ -52,55 +56,48 @@ const Sidebar = ({ ...props }) => {
             </ListItem>
           </NavLink>
         );
-      })}
-    </List>
-  );
-  var brand = (
-    <div className={classes.logo}>
-      <a href="javascript:;" className={classes.logoLink}>
-        <div className={classes.logoImage}>
-          <img src={logo} alt="logo" className={classes.img} />
-        </div>
-        {logoText}
-      </a>
-    </div>
-  );
-  return (
-    <div>
-      <Hidden mdUp>
-        <Drawer
-          variant="temporary"
-          anchor="right"
-          open={props.open}
-          classes={{
-            paper: classes.drawerPaper
-          }}
-          onClose={props.handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true // Better open performance on mobile.
-          }}
-        >
-          {brand}
-          <div className={classes.sidebarWrapper}>
-            <HeaderLinks />
-            {links}
+      }
+    });
+    return items;
+  };
+
+  render() {
+    const {
+      classes,
+      color,
+      logo,
+      image,
+      logoText,
+      routes,
+      open,
+      handleDrawerToggle
+    } = this.props;
+    var links = (
+      <List className={classes.list}>
+        {this.getItems(classes, color, routes)}
+      </List>
+    );
+    var brand = (
+      <div className={classes.logo}>
+        <a href="javascript:;" className={classes.logoLink}>
+          <div className={classes.logoImage}>
+            <img src={logo} alt="logo" className={classes.img} />
           </div>
-          {image !== undefined ? (
-            <div
-              className={classes.background}
-              style={{ backgroundImage: "url(" + image + ")" }}
-            />
-          ) : null}
-        </Drawer>
-      </Hidden>
-      <Hidden smDown>
+          {logoText}
+        </a>
+      </div>
+    );
+
+    return (
+      <div>
         <Drawer
+          variant="persistent"
           anchor="left"
-          variant="permanent"
-          open
+          open={open}
           classes={{
             paper: classes.drawerPaper
           }}
+          onClose={handleDrawerToggle}
         >
           {brand}
           <div className={classes.sidebarWrapper}>{links}</div>
@@ -111,10 +108,10 @@ const Sidebar = ({ ...props }) => {
             />
           ) : null}
         </Drawer>
-      </Hidden>
-    </div>
-  );
-};
+      </div>
+    );
+  }
+}
 
 Sidebar.propTypes = {
   classes: PropTypes.object.isRequired

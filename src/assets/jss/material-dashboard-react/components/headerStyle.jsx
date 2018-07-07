@@ -12,17 +12,17 @@ import {
 const headerStyle = theme => ({
   appBar: {
     backgroundColor: "transparent",
+    borderBottom: "1px solid lightgray",
     boxShadow: "none",
-    borderBottom: "0",
     marginBottom: "0",
     position: "absolute",
     width: "100%",
-    paddingTop: "10px",
+    paddingTop: "0px",
     zIndex: "1029",
     color: "#555555",
     border: "0",
     borderRadius: "3px",
-    padding: "10px 0",
+    padding: "5px 0",
     transition: "all 150ms ease 0s",
     minHeight: "50px",
     display: "block"

@@ -129,7 +129,7 @@ const sidebarStyle = theme => ({
     }
   },
   itemLink: {
-    width: "auto",
+    width: "80%",
     transition: "all 300ms linear",
     margin: "10px 15px 0",
     borderRadius: "3px",
@@ -210,7 +210,7 @@ const sidebarStyle = theme => ({
     position: "relative",
     height: "calc(100vh - 75px)",
     overflow: "auto",
-    width: "260px",
+    width: "100%",
     zIndex: "4",
     overflowScrolling: "touch"
   },
@@ -218,8 +218,8 @@ const sidebarStyle = theme => ({
     [theme.breakpoints.up("md")]: {
       position: "absolute",
       width: "100%",
-      bottom: "13px",
-    },
+      bottom: "13px"
+    }
   }
 });
 
