@@ -6,14 +6,28 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import Select from "@material-ui/core/Select";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
 
-export default class CreateProjectModal extends React.PureComponent {
+const styles = theme => ({
+  formControl: {
+    minWidth: "100%"
+  }
+});
+class CreateFailureModeModal extends React.PureComponent {
   constructor(props) {
     super(props);
     this.initialState = {
-      ProjectName: "",
+      ID: "",
       Status: "",
-      Author: ""
+      Author: "",
+      RPN: 0
     };
     this.state = Object.assign({}, this.initialState);
   }
@@ -28,6 +42,16 @@ export default class CreateProjectModal extends React.PureComponent {
     this.setState(Object.assign({}, this.initialState));
   };
 
+  getFunctionItems = functions => {
+    return functions.map(functionItem => {
+      return (
+        <MenuItem value={functionItem.id}>
+          {functionItem.id}-{functionItem.name}
+        </MenuItem>
+      );
+    });
+  };
+
   handleChange = event => {
     this.setState({
       [event.target.name]: event.target.value
@@ -40,6 +64,7 @@ export default class CreateProjectModal extends React.PureComponent {
   };
 
   render() {
+    const { classes } = this.props;
     return (
       <div>
         <Dialog
@@ -50,15 +75,26 @@ export default class CreateProjectModal extends React.PureComponent {
           <DialogTitle id="form-dialog-title">{this.props.title}</DialogTitle>
           <DialogContent>
             <TextField
-              autoFocus
               margin="dense"
-              id="name"
-              name="ProjectName"
+              id="ID"
+              name="ID"
               label="Name"
               type="text"
               fullWidth
               onChange={this.handleChange}
             />
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="Status">Status</InputLabel>
+              <Select
+                value={this.state.Status}
+                name={"Status"}
+                onChange={this.handleChange}
+              >
+                <MenuItem value={"Approved"}>Approved</MenuItem>
+                <MenuItem value={"Proposed"}>Proposed</MenuItem>
+                <MenuItem value={"Rejected"}>Rejected</MenuItem>
+              </Select>
+            </FormControl>
             <TextField
               margin="dense"
               id="author"
@@ -70,10 +106,10 @@ export default class CreateProjectModal extends React.PureComponent {
             />
             <TextField
               margin="dense"
-              id="status"
-              name="Status"
-              label="Status"
-              type="text"
+              id="rpn"
+              name="RPN"
+              label="RPN"
+              type="number"
               fullWidth
               onChange={this.handleChange}
             />
@@ -91,3 +127,9 @@ export default class CreateProjectModal extends React.PureComponent {
     );
   }
 }
+
+CreateFailureModeModal.propTypes = {
+  classes: PropTypes.object.isRequired
+};
+
+export default withStyles(styles)(CreateFailureModeModal);

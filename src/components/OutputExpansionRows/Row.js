@@ -46,12 +46,14 @@ const styles = theme => ({
   heading: {
     fontSize: theme.typography.pxToRem(15),
     color: "black",
-    textTransform: "capitalize"
+    textTransform: "capitalize",
+    textAlign: "left"
   },
   secondaryHeading: {
     fontSize: theme.typography.pxToRem(15),
     color: "grey",
-    textTransform: "capitalize"
+    textTransform: "capitalize",
+    textAlign: "left"
   },
   link: {
     color: theme.palette.primary.main,

@@ -20,13 +20,18 @@ const styles = theme => ({
     minWidth: "100%"
   }
 });
-class CreateInputOutputModal extends React.PureComponent {
+class CreateFailureModeCause extends React.PureComponent {
   constructor(props) {
     super(props);
     this.initialState = {
       ID: "",
       Status: "",
-      Author: ""
+      Author: "",
+      Detection: 0,
+      DetectionRationale: "",
+      Occurrence: 0,
+      OccurrenceRationale: "",
+      Category: ""
     };
     this.state = Object.assign({}, this.initialState);
   }
@@ -92,6 +97,63 @@ class CreateInputOutputModal extends React.PureComponent {
               fullWidth
               onChange={this.handleChange}
             />
+            <TextField
+              margin="dense"
+              id="Detection"
+              name="Detection"
+              label="Detection"
+              type="number"
+              fullWidth
+              onChange={this.handleChange}
+            />
+            <TextField
+              margin="dense"
+              id="DetectionRationale"
+              name="DetectionRationale"
+              label="DetectionRationale"
+              type="text"
+              fullWidth
+              onChange={this.handleChange}
+            />
+            <TextField
+              margin="dense"
+              id="Occurrence"
+              name="Occurrence"
+              label="Occurrence"
+              type="number"
+              fullWidth
+              onChange={this.handleChange}
+            />
+            <TextField
+              margin="dense"
+              id="OccurrenceRationale"
+              name="OccurrenceRationale"
+              label="OccurrenceRationale"
+              type="text"
+              fullWidth
+              onChange={this.handleChange}
+            />
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="Category">Category</InputLabel>
+              <Select
+                value={this.state.Category}
+                name={"Category"}
+                onChange={this.handleChange}
+              >
+                <MenuItem value={"Sub system Failure"}>
+                  Sub system Failure
+                </MenuItem>
+                <MenuItem value={"Sensitivity to Noise"}>
+                  Sensitivity to Noise
+                </MenuItem>
+                <MenuItem value={"Weakness of Interface"}>
+                  Weakness of Interface
+                </MenuItem>
+                <MenuItem value={"Weakness of Specification"}>
+                  Weakness of Specification
+                </MenuItem>
+              </Select>
+            </FormControl>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.props.handleClose} color="primary">
@@ -107,8 +169,8 @@ class CreateInputOutputModal extends React.PureComponent {
   }
 }
 
-CreateInputOutputModal.propTypes = {
+CreateFailureModeCause.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(CreateInputOutputModal);
+export default withStyles(styles)(CreateFailureModeCause);

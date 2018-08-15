@@ -5,6 +5,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // child components
 import Row from "./Row";
 import CreateSubFunctionModal from "components/ProjectModals/CreateSubFunctionModal";
+import FunctionDetailModal from "components/ProjectModals/FunctionDetailModal";
 
 const styles = theme => ({});
 
@@ -13,7 +14,9 @@ class ExpansionRows extends React.PureComponent {
     super(props);
     this.state = {
       modal: false,
-      selectedFunctionId: null
+      detailModal: false,
+      selectedFunctionId: null,
+      selectedFunction: null
     };
   }
 
@@ -21,6 +24,12 @@ class ExpansionRows extends React.PureComponent {
     this.setState({
       modal: !this.state.modal,
       selectedFunctionId: id
+    });
+  };
+  toggledetailModal = item => {
+    this.setState({
+      detailModal: !this.state.detailModal,
+      selectedFunction: item
     });
   };
 
@@ -38,6 +47,7 @@ class ExpansionRows extends React.PureComponent {
       return (
         <Row
           item={item}
+          openDetailModal={this.toggledetailModal}
           getSubFunctions={this.props.getSubFunctions}
           toggleModal={this.toggleSubFunctionModal}
         />
@@ -55,6 +65,12 @@ class ExpansionRows extends React.PureComponent {
           open={this.state.modal}
           handleClose={this.toggleSubFunctionModal}
           onSubmit={this.onSubmit}
+        />
+        <FunctionDetailModal
+          title={"Function Detail"}
+          item={this.state.selectedFunction}
+          open={this.state.detailModal}
+          handleClose={this.toggledetailModal}
         />
       </div>
     );

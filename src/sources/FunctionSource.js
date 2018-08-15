@@ -2,13 +2,18 @@ import Request from "superagent";
 import {
   getFunctionsSuccess,
   getSubFunctionsAction,
-  getSubFunctionsSuccess
+  getSubFunctionsSuccess,
+  addFunctionSuccess,
+  addSubFunctionSuccess
 } from "actions/FunctionActions";
+import { setMessage } from "actions/ProjectActions";
 import { REQUEST_TIMEOUT } from "constants/AppConstants";
 import { appUrls } from "constants/Urls";
 import {
   functionNormalizer,
-  subFunctionNormalizer
+  subFunctionNormalizer,
+  singleFunctionNormalizer,
+  singleSubFunctionNormalizer
 } from "utils/normalizers/functionNormalizers";
 
 export const getFunctions = id => {
@@ -20,6 +25,9 @@ export const getFunctions = id => {
         if (!err) {
           const data = JSON.parse(res.text);
           dispatch(getFunctionsSuccess(functionNormalizer(data.result)));
+        } else {
+          const errMessage = err.response.text;
+          dispatch(setMessage({ color: "danger", message: errMessage }));
         }
       });
   };
@@ -36,6 +44,9 @@ export const getSubFunctions = id => {
           dispatch(
             getSubFunctionsSuccess(subFunctionNormalizer(data.result), id)
           );
+        } else {
+          const errMessage = err.response.text;
+          dispatch(setMessage({ color: "danger", message: errMessage }));
         }
       });
   };
@@ -49,11 +60,12 @@ export const createFunction = data => {
       .send(data)
       .end((err, res) => {
         if (!err) {
-          const data = JSON.parse(res.text);
+          const response = JSON.parse(res.text).result[0];
           console.log(data);
-          // dispatch(
-          //   getSubProjectsSuccess(subProjectNormalizer(data.result), id)
-          // );
+          dispatch(addFunctionSuccess(singleFunctionNormalizer(response)));
+        } else {
+          const errMessage = err.response.text;
+          dispatch(setMessage({ color: "danger", message: errMessage }));
         }
       });
   };
@@ -67,47 +79,17 @@ export const createSubFunction = data => {
       .send(data)
       .end((err, res) => {
         if (!err) {
-          const data = JSON.parse(res.text);
+          const response = JSON.parse(res.text).result[0];
           console.log(data);
-          // dispatch(
-          //   getSubProjectsSuccess(subProjectNormalizer(data.result), id)
-          // );
-        }
-      });
-  };
-};
-
-export const createInput = data => {
-  const url = appUrls.FUNCTION.ADDINPUT;
-  return dispatch => {
-    Request.post(url)
-      .auth("webuser", "xmYuiV90$")
-      .send(data)
-      .end((err, res) => {
-        if (!err) {
-          const data = JSON.parse(res.text);
-          console.log(data);
-          // dispatch(
-          //   getSubProjectsSuccess(subProjectNormalizer(data.result), id)
-          // );
-        }
-      });
-  };
-};
-
-export const createOutput = data => {
-  const url = appUrls.FUNCTION.ADDOUTPUT;
-  return dispatch => {
-    Request.post(url)
-      .auth("webuser", "xmYuiV90$")
-      .send(data)
-      .end((err, res) => {
-        if (!err) {
-          const data = JSON.parse(res.text);
-          console.log(data);
-          // dispatch(
-          //   getSubProjectsSuccess(subProjectNormalizer(data.result), id)
-          // );
+          dispatch(
+            addSubFunctionSuccess(
+              singleSubFunctionNormalizer(response),
+              data.FunctionRID
+            )
+          );
+        } else {
+          const errMessage = err.response.text;
+          dispatch(setMessage({ color: "danger", message: errMessage }));
         }
       });
   };

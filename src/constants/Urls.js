@@ -18,9 +18,16 @@ export const appUrls = {
     GETALLSUB: `${BASE_URL}/getSubFunctions/{id}`,
     GETALLINPUT: `${BASE_URL}/getInputs/{id}`,
     GETALLOUTPUT: `${BASE_URL}/getOutputs/{id}`,
+    GETALLFAILUREMODES: `${BASE_URL}/getFailureModes/{id}`,
+    GETALLFAILUREEFFECTS: `${BASE_URL}/getFailureModeEffects/{id}`,
+    GETALLFAILURECAUSES: `${BASE_URL}/getFailureCauses/{id}`,
+    GETALLNOISEFACTORS: `${BASE_URL}/getNoiseFactors/{id}`,
     ADD: `${BASE_URL}/createFunction`,
     ADDSUB: `${BASE_URL}/createSubFunction`,
     ADDINPUT: `${BASE_URL}/createInput`,
-    ADDOUTPUT: `${BASE_URL}/createOutput`
+    ADDOUTPUT: `${BASE_URL}/createOutput`,
+    ADDFAILUREMODE: `${BASE_URL}/createFailureMode`,
+    ADDFAILUREEFFECT: `${BASE_URL}/createFailureModeEffect`,
+    ADDFAILURECAUSE: `${BASE_URL}/createFailureCause`
   }
 };

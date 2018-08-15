@@ -2,7 +2,8 @@ import React from "react";
 import classNames from "classnames";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-// core components
+import Grid from "@material-ui/core/Grid";
+import GridItem from "components/Grid/GridItem.jsx";
 import Chip from "@material-ui/core/Chip";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
@@ -13,11 +14,15 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import Divider from "@material-ui/core/Divider";
-
+import CustomTabs from "components/CustomTabs/CustomTabs.jsx";
 //other component
 import Loader from "components/Loader";
 // child components
 import ChildRows from "./ChildRows";
+import FailureCauseGrid from "components/FailureCauseExpansionRows/FailureCauseGrid";
+import FailureEffectGrid from "components/FailureEffectExpansionRows/FailureEffectGrid";
+import CreateFailureCauseModal from "components/ProjectModals/CreateFailureCauseModal";
+import CreateFailureEffectModal from "components/ProjectModals/CreateFailureEffectModal";
 
 const styles = theme => ({
   expansion: {
@@ -34,7 +39,6 @@ const styles = theme => ({
     alignItems: "center",
     padding: 0,
     paddingLeft: 15,
-    paddingBottom: 15,
     paddingRight: 15
   },
   column: {
@@ -73,30 +77,59 @@ class Row extends React.PureComponent {
     super(props);
     this.state = {
       open: false,
-      loader: false
+      loader: false,
+      causeModal: false,
+      effectModal: false
     };
   }
 
+  toggleCauseModal = () => {
+    this.setState({
+      causeModal: !this.state.causeModal
+    });
+  };
+
+  toggleEffectModal = () => {
+    this.setState({
+      effectModal: !this.state.effectModal
+    });
+  };
+
   componentWillReceiveProps(nextProps) {
-    if (!this.props.item.subFuncFetched && nextProps.item.subFuncFetched) {
+    if (!this.props.item.childrenFetched && nextProps.item.childrenFetched) {
       this.setState({
         loader: false
       });
     }
   }
 
+  causeSubmit = data => {
+    this.props.createFailureCause(
+      Object.assign({}, data, {
+        FailureModeRID: this.props.item.id
+      })
+    );
+    this.toggleCauseModal();
+  };
+
+  effectSubmit = data => {
+    this.props.createFailureEffect(
+      Object.assign({}, data, {
+        FailureModeRID: this.props.item.id
+      })
+    );
+    this.toggleEffectModal();
+  };
+
   checkSubProjects = rowState => {
     const state = { open: rowState };
     const { item } = this.props;
-    if (rowState && !item.subFuncFetched) {
-      this.props.getSubFunctions(item.id);
+    if (rowState && !item.childrenFetched) {
+      this.props.getFailureCauses(item.id);
+      this.props.getFailureEffects(item.id);
       state.loader = true;
     }
     this.setState(state);
-  };
-
-  openModal = () => {
-    this.props.toggleModal(this.props.item.id);
   };
 
   toggleRow = () => {
@@ -133,29 +166,54 @@ class Row extends React.PureComponent {
             </Typography>
           </div>
         </ExpansionPanelSummary>
-        <ExpansionPanelActions>
-          <Button
-            variant="extendedFab"
-            size="small"
-            aria-label="delete"
-            color="primary"
-            className={classes.createButton}
-            onClick={this.openModal}
-          >
-            <AddIcon className={classes.extendedIcon} />
-            Create Sub Function
-          </Button>
-        </ExpansionPanelActions>
         <ExpansionPanelDetails className={classes.details}>
           {loader ? (
             <Loader />
           ) : (
-            <ChildRows
-              openDetailModal={this.props.openDetailModal}
-              children={item.subFunctions || []}
-            />
+            <Grid container>
+              <GridItem xs={12} sm={12} md={12}>
+                <CustomTabs
+                  headerColor="info"
+                  fullWidth={true}
+                  tabs={[
+                    {
+                      tabName: "Failure Cause",
+                      tabContent: (
+                        <FailureCauseGrid
+                          data={item.causes}
+                          createFailureCause={this.props.createFailureCause}
+                          toggleCauseModal={this.toggleCauseModal}
+                        />
+                      )
+                    },
+                    {
+                      tabName: "Failure Effect",
+                      tabContent: (
+                        <FailureEffectGrid
+                          data={item.effects}
+                          createFailureEffect={this.props.createFailureEffect}
+                          toggleEffectModal={this.toggleEffectModal}
+                        />
+                      )
+                    }
+                  ]}
+                />
+              </GridItem>
+            </Grid>
           )}
         </ExpansionPanelDetails>
+        <CreateFailureCauseModal
+          title={"Create Failure Cause"}
+          open={this.state.causeModal}
+          handleClose={this.toggleCauseModal}
+          onSubmit={this.causeSubmit}
+        />
+        <CreateFailureEffectModal
+          title={"Create Failure Effect"}
+          open={this.state.effectModal}
+          handleClose={this.toggleEffectModal}
+          onSubmit={this.effectSubmit}
+        />
       </ExpansionPanel>
     );
   }

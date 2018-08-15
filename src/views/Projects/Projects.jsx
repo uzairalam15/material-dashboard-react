@@ -89,7 +89,7 @@ class Projects extends React.PureComponent {
       <Grid container>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
-            <CardHeader color="primary">
+            <CardHeader color="info">
               <h4 className={classes.cardTitleWhite}>Projects</h4>
               <p className={classes.cardCategoryWhite}>
                 list of projects and their sub projects
@@ -116,7 +116,7 @@ class Projects extends React.PureComponent {
                 </GridItem>
                 <GridItem xs={12} sm={12} md={12}>
                   <Table
-                    tableHeaderColor="primary"
+                    tableHeaderColor="info"
                     customRows={
                       <ExpansionRows
                         data={this.props.projects}

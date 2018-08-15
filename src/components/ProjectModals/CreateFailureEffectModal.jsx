@@ -6,14 +6,29 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import Select from "@material-ui/core/Select";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
 
-export default class CreateProjectModal extends React.PureComponent {
+const styles = theme => ({
+  formControl: {
+    minWidth: "100%"
+  }
+});
+class CreateFailureModeEffect extends React.PureComponent {
   constructor(props) {
     super(props);
     this.initialState = {
-      ProjectName: "",
+      ID: "",
       Status: "",
-      Author: ""
+      Author: "",
+      Severity: 0,
+      SeverityRationale: ""
     };
     this.state = Object.assign({}, this.initialState);
   }
@@ -36,10 +51,10 @@ export default class CreateProjectModal extends React.PureComponent {
 
   onSubmit = () => {
     this.props.onSubmit(this.state);
-    this.props.handleClose();
   };
 
   render() {
+    const { classes } = this.props;
     return (
       <div>
         <Dialog
@@ -50,15 +65,26 @@ export default class CreateProjectModal extends React.PureComponent {
           <DialogTitle id="form-dialog-title">{this.props.title}</DialogTitle>
           <DialogContent>
             <TextField
-              autoFocus
               margin="dense"
-              id="name"
-              name="ProjectName"
+              id="ID"
+              name="ID"
               label="Name"
               type="text"
               fullWidth
               onChange={this.handleChange}
             />
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="Status">Status</InputLabel>
+              <Select
+                value={this.state.Status}
+                name={"Status"}
+                onChange={this.handleChange}
+              >
+                <MenuItem value={"Approved"}>Approved</MenuItem>
+                <MenuItem value={"Proposed"}>Proposed</MenuItem>
+                <MenuItem value={"Rejected"}>Rejected</MenuItem>
+              </Select>
+            </FormControl>
             <TextField
               margin="dense"
               id="author"
@@ -70,9 +96,18 @@ export default class CreateProjectModal extends React.PureComponent {
             />
             <TextField
               margin="dense"
-              id="status"
-              name="Status"
-              label="Status"
+              id="Severity"
+              name="Severity"
+              label="Severity"
+              type="number"
+              fullWidth
+              onChange={this.handleChange}
+            />
+            <TextField
+              margin="dense"
+              id="SeverityRationale"
+              name="SeverityRationale"
+              label="SeverityRationale"
               type="text"
               fullWidth
               onChange={this.handleChange}
@@ -91,3 +126,9 @@ export default class CreateProjectModal extends React.PureComponent {
     );
   }
 }
+
+CreateFailureModeEffect.propTypes = {
+  classes: PropTypes.object.isRequired
+};
+
+export default withStyles(styles)(CreateFailureModeEffect);

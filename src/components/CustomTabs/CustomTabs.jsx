@@ -50,6 +50,7 @@ class CustomTabs extends React.Component {
               root: classes.tabsRoot,
               indicator: classes.displayNone
             }}
+            fullWidth={!!this.props.fullWidth}
             scrollable
             scrollButtons="auto"
           >

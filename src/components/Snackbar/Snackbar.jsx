@@ -36,7 +36,9 @@ function Snackbar({ ...props }) {
         horizontal:
           place.indexOf("l") !== -1
             ? "left"
-            : place.indexOf("c") !== -1 ? "center" : "right"
+            : place.indexOf("c") !== -1
+              ? "center"
+              : "right"
       }}
       open={open}
       message={
@@ -46,6 +48,8 @@ function Snackbar({ ...props }) {
         </div>
       }
       action={action}
+      autoHideDuration={props.autoHideDuration}
+      onClose={props.onClose}
       ContentProps={{
         classes: {
           root: classes.root + " " + classes[color],

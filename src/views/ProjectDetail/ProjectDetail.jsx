@@ -15,11 +15,14 @@ import AddIcon from "@material-ui/icons/Add";
 import Divider from "@material-ui/core/Divider";
 import NavigationIcon from "@material-ui/icons/Navigation";
 // child componenets
-import FunctionExpansionRows from "components/FunctionExpansionRows/ExpansionRows";
-import InputExpansionRows from "components/InputExpansionRows/ExpansionRows";
-import OutputExpansionRows from "components/OutputExpansionRows/ExpansionRows";
+import FunctionGrid from "components/FunctionExpansionRows/FunctionGrid";
+import InputGrid from "components/InputExpansionRows/InputGrid";
+import OutputGrid from "components/OutputExpansionRows/OutputGrid";
+import FailureModeGrid from "components/FailureModeExpansionRows/FailureModeGrid";
 import CreateFunctionModal from "components/ProjectModals/CreateFunctionModal";
+import CustomTabs from "components/CustomTabs/CustomTabs.jsx";
 import CreateInputOutputModal from "components/ProjectModals/CreateInputOutputModal";
+import CreateFailureModeModal from "components/ProjectModals/CreateFailureModeModal";
 import {
   getFunctionsAction,
   getFunctionsSuccess,
@@ -28,7 +31,18 @@ import {
   createFunctionAction,
   createSubFunctionAction
 } from "actions/FunctionActions";
-import { createInputAction, createOutputAction } from "actions/ProjectActions";
+import {
+  createInputAction,
+  createOutputAction,
+  getInputsAction,
+  getOutputsAction,
+  getFailureModesAction,
+  createFailureModeAction,
+  createFailureCauseAction,
+  createFailureEffectAction,
+  getFailureCausesAction,
+  getFailureEffectsAction
+} from "actions/ProjectActions";
 
 const styles = theme => ({
   button: {
@@ -70,9 +84,11 @@ class ProjectDetail extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      globalFunctionId: "",
       functionModal: false,
       inputModal: false,
-      outputModal: false
+      outputModal: false,
+      failureModal: false
     };
   }
 
@@ -82,21 +98,15 @@ class ProjectDetail extends React.PureComponent {
     }
   }
 
+  setGlobalFunctionId = id => {
+    this.setState({
+      globalFunctionId: id
+    });
+  };
+
   toggleCreateFunctionModal = () => {
     this.setState({
       functionModal: !this.state.functionModal
-    });
-  };
-
-  toggleCreateInputModal = () => {
-    this.setState({
-      inputModal: !this.state.inputModal
-    });
-  };
-
-  toggleCreateOutputModal = () => {
-    this.setState({
-      outputModal: !this.state.outputModal
     });
   };
 
@@ -106,16 +116,7 @@ class ProjectDetail extends React.PureComponent {
         SubProjectRID: this.props.project.id
       })
     );
-  };
-
-  ioSubmit = (data, mode) => {
-    if (mode === "input") {
-      this.props.createInputAction(data);
-      this.toggleCreateInputModal();
-    } else {
-      this.props.createOutputAction(data);
-      this.toggleCreateOutputModal();
-    }
+    this.toggleCreateFunctionModal();
   };
 
   componentDidMount() {
@@ -125,145 +126,110 @@ class ProjectDetail extends React.PureComponent {
   }
 
   render() {
-    const { classes, project, functions, inputs, outputs } = this.props;
+    const {
+      classes,
+      project,
+      functions,
+      inputs,
+      outputs,
+      failureModes,
+      loader
+    } = this.props;
     return (
       <Grid container>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
-            <CardHeader color="primary">
+            <CardHeader color="info">
               <h4 className={classes.cardTitleWhite}>
                 Project: {project.name}
               </h4>
               <p className={classes.cardCategoryWhite}>
-                list of functions, inputs and outputs of project
+                Select component from tab to create or update
               </p>
             </CardHeader>
             <CardBody>
-              <Grid>
-                <Card>
-                  <CardHeader color="primary">
-                    <h4 className={classes.cardTitleWhite}>Functions</h4>
-                    <p className={classes.cardCategoryWhite}>
-                      list of functions, and their sub-functions
-                    </p>
-                  </CardHeader>
-                  <CardBody>
-                    <GridItem
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      style={{ textAlign: "right" }}
-                    >
-                      <Button
-                        variant="extendedFab"
-                        aria-label="delete"
-                        color="primary"
-                        className={classes.button}
-                        onClick={this.toggleCreateFunctionModal}
-                      >
-                        <AddIcon
-                          className={classes.extendedIcon}
-                          onClick={this.toggleCreateFunctionModal}
-                        />
-                        Create Function
-                      </Button>
-                      <Table
-                        tableHeaderColor="primary"
-                        customRows={
-                          <FunctionExpansionRows
+              <Grid container>
+                <GridItem xs={12} sm={12} md={12}>
+                  <CustomTabs
+                    title="Components:"
+                    headerColor="info"
+                    tabs={[
+                      {
+                        tabName: "Function",
+                        tabContent: (
+                          <FunctionGrid
                             data={functions}
                             getSubFunctions={this.props.getSubFunctionsAction}
+                            toggleCreateFunctionModal={
+                              this.toggleCreateFunctionModal
+                            }
                             createSubFunction={
                               this.props.createSubFunctionAction
                             }
                           />
-                        }
-                      />
-                    </GridItem>
-                  </CardBody>
-                </Card>
-                <Card>
-                  <CardHeader color="primary">
-                    <h4 className={classes.cardTitleWhite}>Inputs</h4>
-                    <p className={classes.cardCategoryWhite}>list of inputs</p>
-                  </CardHeader>
-                  <CardBody>
-                    <GridItem
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      style={{ textAlign: "right" }}
-                    >
-                      <Button
-                        variant="extendedFab"
-                        aria-label="delete"
-                        color="primary"
-                        className={classes.button}
-                        onClick={this.toggleCreateInputModal}
-                      >
-                        <AddIcon className={classes.extendedIcon} />
-                        Create Input
-                      </Button>
-                      {inputs.length ? (
-                        <Table
-                          tableHeaderColor="primary"
-                          customRows={<InputExpansionRows data={inputs} />}
-                        />
-                      ) : (
-                        <h5 style={{ textAlign: "left" }}>No Inputs</h5>
-                      )}
-                    </GridItem>
-                  </CardBody>
-                </Card>
-                <Card>
-                  <CardHeader color="primary">
-                    <h4 className={classes.cardTitleWhite}>Outputs</h4>
-                    <p className={classes.cardCategoryWhite}>list of outputs</p>
-                  </CardHeader>
-                  <CardBody>
-                    <GridItem
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      style={{ textAlign: "right" }}
-                    >
-                      <Button
-                        variant="extendedFab"
-                        aria-label="delete"
-                        color="primary"
-                        className={classes.button}
-                        onClick={this.toggleCreateOutputModal}
-                      >
-                        <AddIcon className={classes.extendedIcon} />
-                        Create Output
-                      </Button>
-                      {outputs.length ? (
-                        <Table
-                          tableHeaderColor="primary"
-                          customRows={<OutputExpansionRows data={outputs} />}
-                        />
-                      ) : (
-                        <h5 style={{ textAlign: "left" }}>No Outputs</h5>
-                      )}
-                    </GridItem>
-                  </CardBody>
-                </Card>
+                        )
+                      },
+                      {
+                        tabName: "Input",
+                        tabContent: (
+                          <InputGrid
+                            data={inputs}
+                            functions={functions}
+                            loader={loader}
+                            globalFunctionId={this.state.globalFunctionId}
+                            setGlobalFunctionId={this.setGlobalFunctionId}
+                            getInputs={this.props.getInputsAction}
+                            createInputAction={this.props.createInputAction}
+                          />
+                        )
+                      },
+                      {
+                        tabName: "Output",
+                        tabContent: (
+                          <OutputGrid
+                            data={outputs}
+                            functions={functions}
+                            loader={loader}
+                            globalFunctionId={this.state.globalFunctionId}
+                            setGlobalFunctionId={this.setGlobalFunctionId}
+                            getOutputs={this.props.getOutputsAction}
+                            createOutputAction={this.props.createOutputAction}
+                          />
+                        )
+                      },
+                      {
+                        tabName: "Failure Mode",
+                        tabContent: (
+                          <FailureModeGrid
+                            data={failureModes}
+                            outputs={outputs}
+                            globalFunctionId={this.state.globalFunctionId}
+                            createFailureCause={
+                              this.props.createFailureCauseAction
+                            }
+                            createFailureMode={
+                              this.props.createFailureModeAction
+                            }
+                            createFailureEffect={
+                              this.props.createFailureEffectAction
+                            }
+                            getFailureCauses={this.props.getFailureCausesAction}
+                            getFailureEffects={
+                              this.props.getFailureEffectsAction
+                            }
+                            getFailureModes={this.props.getFailureModesAction}
+                            loader={this.props.loader}
+                          />
+                        )
+                      }
+                    ]}
+                  />
+                </GridItem>
               </Grid>
             </CardBody>
           </Card>
         </GridItem>
-        <CreateInputOutputModal
-          functions={this.props.functions}
-          title={this.state.inputModal ? "Create Input" : "Create Output"}
-          open={this.state.inputModal || this.state.outputModal}
-          mode={this.state.inputModal ? "input" : "output"}
-          handleClose={
-            this.state.inputModal
-              ? this.toggleCreateInputModal
-              : this.toggleCreateOutputModal
-          }
-          onSubmit={this.ioSubmit}
-        />
+
         <CreateFunctionModal
           title={"Create Function"}
           open={this.state.functionModal}
@@ -277,21 +243,31 @@ class ProjectDetail extends React.PureComponent {
 
 const mapStateToProps = state => ({
   project: state.projectDetailReducer.project,
+  failureModes: state.projectDetailReducer.failureModes,
   functions: state.projectDetailReducer.functions,
   inputs: state.projectDetailReducer.inputs,
-  outputs: state.projectDetailReducer.outputs
+  outputs: state.projectDetailReducer.outputs,
+  loader: state.projectDetailReducer.loader
 });
 
 export default connect(
   mapStateToProps,
   {
     getFunctionsAction,
+    getInputsAction,
+    getOutputsAction,
     getFunctionsSuccess,
     getSubFunctionsAction,
     getSubFunctionsSuccess,
     createFunctionAction,
     createSubFunctionAction,
     createInputAction,
-    createOutputAction
+    createOutputAction,
+    getFailureModesAction,
+    createFailureModeAction,
+    createFailureCauseAction,
+    createFailureEffectAction,
+    getFailureCausesAction,
+    getFailureEffectsAction
   }
 )(withStyles(styles)(ProjectDetail));

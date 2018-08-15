@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import { Switch, Route, Redirect } from "react-router-dom";
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
@@ -9,6 +10,7 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 import withStyles from "@material-ui/core/styles/withStyles";
 // core components
 import Header from "components/Header/Header.jsx";
+import Snackbar from "components/Snackbar/Snackbar.jsx";
 import Footer from "components/Footer/Footer.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 
@@ -18,6 +20,7 @@ import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboar
 
 import image from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/reactlogo.png";
+import { unsetMessage } from "actions/ProjectActions";
 
 const switchRoutes = (
   <Switch>
@@ -50,7 +53,7 @@ class App extends React.Component {
     }
   }
   render() {
-    const { classes, ...rest } = this.props;
+    const { classes, notification, ...rest } = this.props;
     return (
       <div className={classes.wrapper}>
         <Sidebar
@@ -73,6 +76,16 @@ class App extends React.Component {
           <div className={classes.content}>
             <div className={classes.container}>{switchRoutes}</div>
           </div>
+          <Snackbar
+            place="bl"
+            color={notification.color}
+            message={notification.message}
+            open={!!notification.message}
+            autoHideDuration={3000}
+            onClose={() => this.props.unsetMessage()}
+            closeNotification={() => this.props.unsetMessage()}
+            close
+          />
           <Footer />
         </div>
       </div>
@@ -84,4 +97,13 @@ App.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(dashboardStyle)(App);
+const mapStateToProps = state => ({
+  notification: state.notificationReducer
+});
+
+export default connect(
+  mapStateToProps,
+  {
+    unsetMessage
+  }
+)(withStyles(dashboardStyle)(App));

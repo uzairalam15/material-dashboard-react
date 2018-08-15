@@ -11,7 +11,7 @@ import TableRow from "@material-ui/core/TableRow";
 
 const CustomTableCell = withStyles(theme => ({
   head: {
-    backgroundColor: "#00acc1",
+    background: "linear-gradient(60deg, #26c6da, #00acc1)",
     fontSize: 12,
     color: theme.palette.common.white
   },
@@ -47,7 +47,7 @@ class ChildRow extends React.PureComponent {
   getChildRow = (classes, children) => {
     if (children.length) {
       return (
-        <Table className={classes.table}>
+        <Table tableHeaderColor="info" className={classes.table}>
           <TableHead>
             <TableRow>
               <CustomTableCell>#Id</CustomTableCell>

@@ -11,7 +11,7 @@ import TableRow from "@material-ui/core/TableRow";
 
 const CustomTableCell = withStyles(theme => ({
   head: {
-    background: "linear-gradient(60deg, #26c6da, #00acc1)",
+    backgroundColor: "#00acc1",
     fontSize: 12,
     color: theme.palette.common.white
   },
@@ -38,10 +38,9 @@ class ChildRow extends React.PureComponent {
     this.state = {};
   }
 
-  openDetail = e => {
-    const index = e.target.getAttribute("data-index");
-    const item = this.props.children[Number(index)];
-    //this.props.openDetailModal(item);
+  openProject = e => {
+    const id = e.target.getAttribute("data-id");
+    this.props.openProject(id);
   };
 
   getChildRow = (classes, children) => {
@@ -57,7 +56,7 @@ class ChildRow extends React.PureComponent {
             </TableRow>
           </TableHead>
           <TableBody>
-            {children.map((n, index) => {
+            {children.map(n => {
               return (
                 <TableRow className={classes.row} key={n.id}>
                   <CustomTableCell component="th" scope="row">
@@ -70,13 +69,12 @@ class ChildRow extends React.PureComponent {
                   <CustomTableCell>
                     <Button
                       variant="contained"
-                      dataIndex={index}
+                      dataId={n.id}
                       size="small"
                       color="primary"
-                      disabled={true}
-                      onClick={this.openDetail}
+                      onClick={this.openProject}
                     >
-                      View Detail
+                      Open
                     </Button>
                   </CustomTableCell>
                 </TableRow>
@@ -86,7 +84,7 @@ class ChildRow extends React.PureComponent {
         </Table>
       );
     }
-    return <h6>No Sub Functions</h6>;
+    return <h6>No Sub Projects</h6>;
   };
 
   render() {

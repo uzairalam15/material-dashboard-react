@@ -1,4 +1,8 @@
 export default {
+  notificationReducer: {
+    color: "",
+    message: ""
+  },
   projectReducer: {
     projects: []
   },
@@ -6,6 +10,8 @@ export default {
     project: {},
     functions: [],
     inputs: [],
-    outputs: []
+    outputs: [],
+    failureModes: [],
+    loader: false
   }
 };
