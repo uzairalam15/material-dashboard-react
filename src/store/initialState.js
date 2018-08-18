@@ -3,6 +3,9 @@ export default {
     color: "",
     message: ""
   },
+  programReducer: {
+    programs: []
+  },
   projectReducer: {
     projects: []
   },

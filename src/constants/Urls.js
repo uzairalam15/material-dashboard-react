@@ -1,11 +1,41 @@
 // will be used for the environments
 
 const base_urls = {
-  TEST: `http://orientdb01.eastus.cloudapp.azure.com:2480/function/Farsak01`
+  TEST: {
+    GET: `http://orientdb01.eastus.cloudapp.azure.com:2480/function/Farsak01`,
+    DOCUMENT: `http://orientdb01.eastus.cloudapp.azure.com:2480/document/Farsak01`
+  }
 };
 const CURRENT_ENV = "TEST";
-export const BASE_URL = base_urls[CURRENT_ENV];
+export const authParams = {
+  user: "webuser",
+  password: "UtNcWx98LaEr"
+};
+export const BASE_URL = base_urls[CURRENT_ENV]["GET"];
+export const BASE_URL_DOCUMENT = base_urls[CURRENT_ENV]["DOCUMENT"];
 export const appUrls = {
+  PROGRAM: {
+    GETALL: {
+      type: "get",
+      url: `${BASE_URL}/getPrograms`
+    },
+    GET: {
+      type: "get",
+      url: `${BASE_URL}/getProgram/{id}`
+    },
+    ADD: {
+      type: "post",
+      url: `${BASE_URL}/createProgram`
+    },
+    UPDATE: {
+      type: "put",
+      url: `${BASE_URL_DOCUMENT}/{id}`
+    },
+    DELETE: {
+      type: "delete",
+      url: `${BASE_URL_DOCUMENT}/{id}`
+    }
+  },
   PROJECT: {
     GETALL: `${BASE_URL}/getProjects`,
     GET: `${BASE_URL}/getProjectByRID/{id}`,

@@ -6,6 +6,10 @@ export function getObjectOfId(array, id) {
   }
 }
 
+export function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 export function editItemAtIndex(array, data, index) {
   return array
     .slice(0, index)
