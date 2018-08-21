@@ -21,15 +21,15 @@ import FormControl from "@material-ui/core/FormControl";
 
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
-import CreateFailureModeModal from "./modals/CreateFailureModeModal.jsx";
-import FailureModeTasks from "./FailureModeTasks.jsx";
+import CreatePreventionControlModal from "./modals/CreatePreventionControlModal.jsx";
+import PreventionControlTasks from "./PreventionControlTasks.jsx";
 
 import {
-  getFailureModesAction,
-  createFailureModeAction,
-  updateFailureModeAction,
-  deleteFailureModeAction
-} from "actions/FailureModeActions";
+  getPreventionControlsAction,
+  createPreventionControlAction,
+  updatePreventionControlAction,
+  deletePreventionControlAction
+} from "actions/PreventionControlActions";
 
 const styles = theme => ({
   button: {
@@ -82,57 +82,53 @@ const styles = theme => ({
   }
 });
 
-class FailureModeElement extends React.PureComponent {
+class PreventionControlElement extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
       modal: false,
       modalMode: "create",
-      selectedFailureMode: {}
+      selectedPreventionControl: {}
     };
   }
 
-  // handleChange = event => {
-  //   const value = event.target.value;
+  componentDidMount() {
+    this.props.getPreventionControlsAction(this.props.item.id);
+  }
 
-  //   this.setState({
-  //     functionId: value
-  //   });
-  // };
-
-  toggleFailureModeModal = (e, mode = "create", outputItem = {}) => {
+  togglePreventionControlModal = (e, mode = "create", outputItem = {}) => {
     this.setState({
       modal: !this.state.modal,
       modalMode: mode,
-      selectedFailureMode: outputItem
+      selectedPreventionControl: outputItem
     });
   };
 
-  populateFailureModeAction = () => {
+  populatePreventionControlAction = () => {
     if (this.state.modalMode === "create") {
-      return this.props.createFailureModeAction;
+      return this.props.createPreventionControlAction;
     }
-    return this.props.updateFailureModeAction;
+    return this.props.updatePreventionControlAction;
   };
 
-  getFailureModeElements = failureModes => {
-    if (failureModes.length) {
-      return failureModes.map(output => {
+  getPreventionControlElements = preventionControls => {
+    if (preventionControls.length) {
+      return preventionControls.map(output => {
         return (
-          <FailureModeTasks
+          <PreventionControlTasks
             item={output}
-            deleteFailureMode={this.props.deleteFailureModeAction}
-            toggleFailureModeModal={this.toggleFailureModeModal}
+            deletePreventionControl={this.props.deletePreventionControlAction}
+            togglePreventionControlModal={this.togglePreventionControlModal}
           />
         );
       });
     }
-    return <h5 style={{ textAlign: "center" }}>No Failure Modes</h5>;
+    return <h5 style={{ textAlign: "center" }}>No PreventionControls</h5>;
   };
 
   render() {
-    const { classes, item, failureModes } = this.props;
+    const { classes, item, preventionControls } = this.props;
     const { open } = this.state;
     return (
       <GridItem xs={12} sm={12} md={12}>
@@ -144,44 +140,48 @@ class FailureModeElement extends React.PureComponent {
                 aria-label="delete"
                 color="primary"
                 className={classes.button}
-                onClick={this.toggleFailureModeModal}
+                onClick={this.togglePreventionControlModal}
               >
                 <AddIcon className={classes.extendedIcon} />
-                Create Failure Mode
+                Create
               </Button>
             </GridItem>
           </Grid>
-          {this.getFailureModeElements(failureModes)}
+          <PreventionControlTasks
+            items={preventionControls}
+            toggleEditModal={this.togglePreventionControlModal}
+            deletePreventionControl={this.props.deletePreventionControlAction}
+          />
         </CardBody>
-        <CreateFailureModeModal
-          title={`${this.state.modalMode.toUpperCase()} Failure Mode`}
+        <CreatePreventionControlModal
+          title={`${this.state.modalMode.toUpperCase()} PreventionControl`}
           open={this.state.modal}
           modalMode={this.state.modalMode}
-          selectedOutput={this.props.item}
-          selectedFailureMode={this.state.selectedFailureMode}
-          handleClose={this.toggleFailureModeModal}
-          onSubmit={this.populateFailureModeAction()}
+          selectedFailureCause={this.props.item}
+          selectedPreventionControl={this.state.selectedPreventionControl}
+          handleClose={this.togglePreventionControlModal}
+          onSubmit={this.populatePreventionControlAction()}
         />
       </GridItem>
     );
   }
 }
 
-FailureModeElement.propTypes = {
+PreventionControlElement.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  failureModes: state.projectDetailReducer.failureModes,
+  preventionControls: state.projectDetailReducer.preventionControls,
   functions: state.projectDetailReducer.functions
 });
 
 export default connect(
   mapStateToProps,
   {
-    getFailureModesAction,
-    createFailureModeAction,
-    updateFailureModeAction,
-    deleteFailureModeAction
+    getPreventionControlsAction,
+    createPreventionControlAction,
+    updatePreventionControlAction,
+    deletePreventionControlAction
   }
-)(withStyles(styles)(FailureModeElement));
+)(withStyles(styles)(PreventionControlElement));

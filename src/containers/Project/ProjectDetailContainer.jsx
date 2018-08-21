@@ -38,9 +38,9 @@ class ProjectContainerDetail extends React.Component {
     if (navigator.platform.indexOf("Win") > -1) {
       const ps = new PerfectScrollbar(this.refs.mainPanel);
     }
-    // if (!this.props.selectedProgram) {
-    //   this.props.history.push("/programs");
-    // }
+    if (!this.props.selectedProgram) {
+      this.props.history.push("/programs");
+    }
   }
   componentDidUpdate(e) {
     if (e.history.location.pathname !== e.location.pathname) {

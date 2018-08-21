@@ -24,12 +24,15 @@ import GridItem from "components/Grid/GridItem.jsx";
 import CreateOutputModal from "./modals/CreateInputModal";
 import OutputTasks from "./OutputTasks.jsx";
 
+import { getFailureModesAction } from "actions/FailureModeActions";
+
 import {
   getOutputsAction,
   createOutputAction,
   updateOutputAction,
   deleteOutputAction
 } from "actions/OutputActions";
+import { clearOutput } from "actions/SharedActions";
 
 const styles = theme => ({
   button: {
@@ -88,10 +91,21 @@ class OutputElement extends React.PureComponent {
     this.state = {
       open: false,
       modal: false,
+      openIndex: null,
       functionId: null,
       modalMode: "create",
       selectedOutput: {}
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.openIndex !== nextProps.openIndex) {
+      this.setState({
+        open: false,
+        functionId: null,
+        modal: false
+      });
+    }
   }
 
   toggleRow = () => {
@@ -139,12 +153,19 @@ class OutputElement extends React.PureComponent {
 
   getOutputElements = outputs => {
     if (outputs.length) {
-      return outputs.map(output => {
+      return outputs.map((output, index) => {
         return (
           <OutputTasks
             item={output}
+            index={index}
+            openIndex={this.state.openIndex}
+            updateIndex={passedIndex => {
+              this.props.clearOutput();
+              this.setState({ openIndex: passedIndex });
+            }}
             deleteOutput={this.props.deleteOutputAction}
             toggleOutputModal={this.toggleOutputModal}
+            getFailureModesAction={this.props.getFailureModesAction}
           />
         );
       });
@@ -251,6 +272,8 @@ export default connect(
     getOutputsAction,
     createOutputAction,
     updateOutputAction,
-    deleteOutputAction
+    deleteOutputAction,
+    getFailureModesAction,
+    clearOutput
   }
 )(withStyles(styles)(OutputElement));

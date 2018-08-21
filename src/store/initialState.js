@@ -19,6 +19,9 @@ export default {
     failureModes: [],
     failureCauses: [],
     failureEffects: [],
+    noiseFactors: [],
+    preventionControls: [],
+    safetyRequirements: [],
     loader: false
   }
 };

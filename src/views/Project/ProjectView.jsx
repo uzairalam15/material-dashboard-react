@@ -33,6 +33,8 @@ import {
   setSelectedProject
 } from "actions/ProjectActions";
 
+import { clearProject } from "actions/SharedActions";
+
 const styles = theme => ({
   button: {
     margin: theme.spacing.unit
@@ -92,6 +94,7 @@ class Projects extends React.PureComponent {
   }
 
   componentDidMount() {
+    this.props.clearProject();
     this.fetchProjects();
   }
 
@@ -269,6 +272,7 @@ export default connect(
     createSubProjectAction,
     updateSubProjectAction,
     deleteSubProjectAction,
-    setSelectedProject
+    setSelectedProject,
+    clearProject
   }
 )(withRouter(withStyles(styles)(Projects)));

@@ -21,15 +21,15 @@ import FormControl from "@material-ui/core/FormControl";
 
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
-import CreateFailureModeModal from "./modals/CreateFailureModeModal.jsx";
-import FailureModeTasks from "./FailureModeTasks.jsx";
+import CreateNoiseFactorModal from "./modals/CreateNoiseFactorModal.jsx";
+import NoiseFactorTasks from "./NoiseFactorTasks.jsx";
 
 import {
-  getFailureModesAction,
-  createFailureModeAction,
-  updateFailureModeAction,
-  deleteFailureModeAction
-} from "actions/FailureModeActions";
+  getNoiseFactorsAction,
+  createNoiseFactorAction,
+  updateNoiseFactorAction,
+  deleteNoiseFactorAction
+} from "actions/NoiseFactorActions";
 
 const styles = theme => ({
   button: {
@@ -82,57 +82,53 @@ const styles = theme => ({
   }
 });
 
-class FailureModeElement extends React.PureComponent {
+class NoiseFactorElement extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
       modal: false,
       modalMode: "create",
-      selectedFailureMode: {}
+      selectedNoiseFactor: {}
     };
   }
 
-  // handleChange = event => {
-  //   const value = event.target.value;
+  componentDidMount() {
+    this.props.getNoiseFactorsAction(this.props.item.id);
+  }
 
-  //   this.setState({
-  //     functionId: value
-  //   });
-  // };
-
-  toggleFailureModeModal = (e, mode = "create", outputItem = {}) => {
+  toggleNoiseFactorModal = (e, mode = "create", outputItem = {}) => {
     this.setState({
       modal: !this.state.modal,
       modalMode: mode,
-      selectedFailureMode: outputItem
+      selectedNoiseFactor: outputItem
     });
   };
 
-  populateFailureModeAction = () => {
+  populateNoiseFactorAction = () => {
     if (this.state.modalMode === "create") {
-      return this.props.createFailureModeAction;
+      return this.props.createNoiseFactorAction;
     }
-    return this.props.updateFailureModeAction;
+    return this.props.updateNoiseFactorAction;
   };
 
-  getFailureModeElements = failureModes => {
-    if (failureModes.length) {
-      return failureModes.map(output => {
+  getNoiseFactorElements = noiseFactors => {
+    if (noiseFactors.length) {
+      return noiseFactors.map(output => {
         return (
-          <FailureModeTasks
+          <NoiseFactorTasks
             item={output}
-            deleteFailureMode={this.props.deleteFailureModeAction}
-            toggleFailureModeModal={this.toggleFailureModeModal}
+            deleteNoiseFactor={this.props.deleteNoiseFactorAction}
+            toggleNoiseFactorModal={this.toggleNoiseFactorModal}
           />
         );
       });
     }
-    return <h5 style={{ textAlign: "center" }}>No Failure Modes</h5>;
+    return <h5 style={{ textAlign: "center" }}>No NoiseFactors</h5>;
   };
 
   render() {
-    const { classes, item, failureModes } = this.props;
+    const { classes, item, noiseFactors } = this.props;
     const { open } = this.state;
     return (
       <GridItem xs={12} sm={12} md={12}>
@@ -144,44 +140,48 @@ class FailureModeElement extends React.PureComponent {
                 aria-label="delete"
                 color="primary"
                 className={classes.button}
-                onClick={this.toggleFailureModeModal}
+                onClick={this.toggleNoiseFactorModal}
               >
                 <AddIcon className={classes.extendedIcon} />
-                Create Failure Mode
+                Create
               </Button>
             </GridItem>
           </Grid>
-          {this.getFailureModeElements(failureModes)}
+          <NoiseFactorTasks
+            items={noiseFactors}
+            toggleEditModal={this.toggleNoiseFactorModal}
+            deleteNoiseFactor={this.props.deleteNoiseFactorAction}
+          />
         </CardBody>
-        <CreateFailureModeModal
-          title={`${this.state.modalMode.toUpperCase()} Failure Mode`}
+        <CreateNoiseFactorModal
+          title={`${this.state.modalMode.toUpperCase()} NoiseFactor`}
           open={this.state.modal}
           modalMode={this.state.modalMode}
-          selectedOutput={this.props.item}
-          selectedFailureMode={this.state.selectedFailureMode}
-          handleClose={this.toggleFailureModeModal}
-          onSubmit={this.populateFailureModeAction()}
+          selectedFailureCause={this.props.item}
+          selectedNoiseFactor={this.state.selectedNoiseFactor}
+          handleClose={this.toggleNoiseFactorModal}
+          onSubmit={this.populateNoiseFactorAction()}
         />
       </GridItem>
     );
   }
 }
 
-FailureModeElement.propTypes = {
+NoiseFactorElement.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  failureModes: state.projectDetailReducer.failureModes,
+  noiseFactors: state.projectDetailReducer.noiseFactors,
   functions: state.projectDetailReducer.functions
 });
 
 export default connect(
   mapStateToProps,
   {
-    getFailureModesAction,
-    createFailureModeAction,
-    updateFailureModeAction,
-    deleteFailureModeAction
+    getNoiseFactorsAction,
+    createNoiseFactorAction,
+    updateNoiseFactorAction,
+    deleteNoiseFactorAction
   }
-)(withStyles(styles)(FailureModeElement));
+)(withStyles(styles)(NoiseFactorElement));

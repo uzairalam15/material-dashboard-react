@@ -175,6 +175,116 @@ export const appUrls = {
       type: "delete",
       url: `${BASE_URL_DOCUMENT}/{id}`
     }
+  },
+  FAILURE_EFFECT: {
+    GETALL: {
+      type: "get",
+      url: `${BASE_URL}/getFailureModeEffects/{id}`
+    },
+    GET: {
+      type: "get",
+      url: `${BASE_URL}/getFailureModeEffect/{id}`
+    },
+    ADD: {
+      type: "post",
+      url: `${BASE_URL}/createFailureModeEffect`
+    },
+    UPDATE: {
+      type: "put",
+      url: `${BASE_URL_DOCUMENT}/{id}`
+    },
+    DELETE: {
+      type: "delete",
+      url: `${BASE_URL_DOCUMENT}/{id}`
+    }
+  },
+  FAILURE_CAUSE: {
+    GETALL: {
+      type: "get",
+      url: `${BASE_URL}/getFailureCauses/{id}`
+    },
+    GET: {
+      type: "get",
+      url: `${BASE_URL}/getFailureCause/{id}`
+    },
+    ADD: {
+      type: "post",
+      url: `${BASE_URL}/createFailureCause`
+    },
+    UPDATE: {
+      type: "put",
+      url: `${BASE_URL_DOCUMENT}/{id}`
+    },
+    DELETE: {
+      type: "delete",
+      url: `${BASE_URL_DOCUMENT}/{id}`
+    }
+  },
+  NOISE_FACTOR: {
+    GETALL: {
+      type: "get",
+      url: `${BASE_URL}/getNoiseFactors/{id}`
+    },
+    GET: {
+      type: "get",
+      url: `${BASE_URL}/getNoiseFactor/{id}`
+    },
+    ADD: {
+      type: "post",
+      url: `${BASE_URL}/createNoiseFactor`
+    },
+    UPDATE: {
+      type: "put",
+      url: `${BASE_URL_DOCUMENT}/{id}`
+    },
+    DELETE: {
+      type: "delete",
+      url: `${BASE_URL_DOCUMENT}/{id}`
+    }
+  },
+  PREVENTION_CONTROL: {
+    GETALL: {
+      type: "get",
+      url: `${BASE_URL}/getPreventionControls/{id}`
+    },
+    GET: {
+      type: "get",
+      url: `${BASE_URL}/getPreventionControl/{id}`
+    },
+    ADD: {
+      type: "post",
+      url: `${BASE_URL}/CreatePreventionControl`
+    },
+    UPDATE: {
+      type: "put",
+      url: `${BASE_URL_DOCUMENT}/{id}`
+    },
+    DELETE: {
+      type: "delete",
+      url: `${BASE_URL_DOCUMENT}/{id}`
+    }
+  },
+  SAFETY_REQUIREMENT: {
+    GETALL: {
+      type: "get",
+      url: `${BASE_URL}/getSafetyRequirements/{id}`
+    },
+    GET: {
+      type: "get",
+      url: `${BASE_URL}/getSafetyRequirement/{id}`
+    },
+    ADD: {
+      type: "post",
+      url: `${BASE_URL}/CreateSafetyRequirement`
+    },
+    UPDATE: {
+      type: "put",
+      url: `${BASE_URL_DOCUMENT}/{id}`
+    },
+    DELETE: {
+      type: "delete",
+      url: `${BASE_URL_DOCUMENT}/{id}`
+    }
   }
   // FUNCTION: {
   //   GETALL: `${BASE_URL}/getFunctions/{id}`,

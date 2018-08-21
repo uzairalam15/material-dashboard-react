@@ -28,6 +28,7 @@ import {
 } from "actions/ItemActions";
 
 import { getFunctionsAction } from "actions/FunctionActions";
+import { clearItem } from "actions/SharedActions";
 
 const styles = theme => ({
   button: {
@@ -80,6 +81,7 @@ class Items extends React.PureComponent {
     this.state = {
       itemModal: false,
       modalMode: "create",
+      openIndex: null,
       modelTitle: "Item",
       selectedItem: {}
     };
@@ -107,10 +109,16 @@ class Items extends React.PureComponent {
 
   getItemElements = items => {
     if (items.length) {
-      return items.map(item => {
+      return items.map((item, index) => {
         return (
           <ItemElement
             item={item}
+            index={index}
+            openIndex={this.state.openIndex}
+            updateIndex={passedIndex => {
+              this.props.clearItem();
+              this.setState({ openIndex: passedIndex });
+            }}
             getFunctionsAction={this.props.getFunctionsAction}
             deleteItem={this.deleteItem}
             toggleItemModal={this.toggleItemModal}
@@ -186,6 +194,7 @@ export default connect(
     createItemAction,
     updateItemAction,
     deleteItemAction,
-    getFunctionsAction
+    getFunctionsAction,
+    clearItem
   }
 )(withRouter(withStyles(styles)(Items)));

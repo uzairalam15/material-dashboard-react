@@ -21,15 +21,15 @@ import FormControl from "@material-ui/core/FormControl";
 
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
-import CreateInputModal from "./modals/CreateInputModal";
-import Tasks from "./InputTasks.jsx";
+import CreateFailureEffectModal from "./modals/CreateFailureEffectModal.jsx";
+import FailureEffectTasks from "./FailureEffectTasks.jsx";
 
 import {
-  getInputsAction,
-  createInputAction,
-  updateInputAction,
-  deleteInputAction
-} from "actions/InputActions";
+  getFailureEffectsAction,
+  createFailureEffectAction,
+  updateFailureEffectAction,
+  deleteFailureEffectAction
+} from "actions/FailureEffectActions";
 
 const styles = theme => ({
   button: {
@@ -82,76 +82,69 @@ const styles = theme => ({
   }
 });
 
-class InputElement extends React.PureComponent {
+class FailureEffectElement extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
       modal: false,
-      functionId: null,
       modalMode: "create",
-      selectedInput: {}
+      selectedFailureEffect: {}
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.openIndex !== nextProps.openIndex) {
-      this.setState({
-        open: false,
-        functionId: null,
-        modal: false
-      });
-    }
-  }
-
   toggleRow = () => {
+    if (!this.state.open) {
+      this.props.getFailureEffectsAction(this.props.item.id);
+    }
     this.setState({
       open: !this.state.open
     });
   };
 
-  getFunctionItems = functions => {
-    return functions.map(functionItem => {
-      return (
-        <MenuItem value={functionItem.id}>
-          {functionItem.id}-{functionItem.name}
-        </MenuItem>
-      );
-    });
-  };
+  // handleChange = event => {
+  //   const value = event.target.value;
 
-  handleChange = event => {
-    const value = event.target.value;
-    if (this.state.functionId !== value && value) {
-      this.props.getInputsAction(value);
-    }
+  //   this.setState({
+  //     functionId: value
+  //   });
+  // };
+
+  toggleFailureEffectModal = (e, mode = "create", outputItem = {}) => {
     this.setState({
-      functionId: value
+      modal: !this.state.modal,
+      modalMode: mode,
+      selectedFailureEffect: outputItem
     });
   };
 
-  toggleInputModal = (e, mode = "create", inputItem = {}) => {
-    if (this.state.functionId) {
-      this.setState({
-        modal: !this.state.modal,
-        modalMode: mode,
-        selectedInput: inputItem
+  populateFailureEffectAction = () => {
+    if (this.state.modalMode === "create") {
+      return this.props.createFailureEffectAction;
+    }
+    return this.props.updateFailureEffectAction;
+  };
+
+  getFailureEffectElements = failureEffects => {
+    if (failureEffects.length) {
+      return failureEffects.map(output => {
+        return (
+          <FailureEffectTasks
+            item={output}
+            deleteFailureEffect={this.props.deleteFailureEffectAction}
+            toggleFailureEffectModal={this.toggleFailureEffectModal}
+          />
+        );
       });
     }
-  };
-
-  populateInputAction = () => {
-    if (this.state.modalMode === "create") {
-      return this.props.createInputAction;
-    }
-    return this.props.updateInputAction;
+    return <h5 style={{ textAlign: "center" }}>No FailureEffects</h5>;
   };
 
   render() {
-    const { classes, item, inputs, functions } = this.props;
+    const { classes, item, failureEffects } = this.props;
     const { open } = this.state;
     return (
-      <GridItem xs={6} sm={6} md={6}>
+      <GridItem xs={12} sm={12} md={12}>
         <ExpansionPanel expanded={open} onChange={this.toggleRow}>
           <ExpansionPanelSummary
             classes={{
@@ -165,9 +158,9 @@ class InputElement extends React.PureComponent {
             <CardHeader style={{ width: "100%", margin: 6 }} color="info">
               <Grid container>
                 <GridItem xs={12} lg={12} md={12} style={{ paddingLeft: 0 }}>
-                  <h4 className={classes.cardTitleWhite}>Inputs</h4>
+                  <h4 className={classes.cardTitleWhite}>FailureEffects</h4>
                   <p className={classes.cardCategoryWhite}>
-                    Expand to inputs and its dependent elements
+                    Expand to failureEffects and its dependent elements
                   </p>
                 </GridItem>
               </Grid>
@@ -180,71 +173,61 @@ class InputElement extends React.PureComponent {
           >
             <CardBody style={{ padding: 0 }}>
               <Grid container>
-                <GridItem xs={6} sm={6} md={6}>
-                  <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="functionId">
-                      Select Function
-                    </InputLabel>
-                    <Select
-                      value={this.state.functionId}
-                      id={"functionId"}
-                      name={"functionId"}
-                      onChange={this.handleChange}
-                    >
-                      {this.getFunctionItems(functions)}
-                    </Select>
-                  </FormControl>
-                </GridItem>
-                <GridItem xs={6} sm={6} md={6} style={{ textAlign: "right" }}>
+                <GridItem
+                  xs={12}
+                  sm={12}
+                  md={12}
+                  style={{ textAlign: "right" }}
+                >
                   <Button
                     variant="extendedFab"
                     aria-label="delete"
                     color="primary"
                     className={classes.button}
-                    onClick={this.toggleInputModal}
+                    onClick={this.toggleFailureEffectModal}
                   >
                     <AddIcon className={classes.extendedIcon} />
                     Create
                   </Button>
                 </GridItem>
               </Grid>
-              <Tasks
-                items={inputs}
-                toggleEditModal={this.toggleInputModal}
-                deleteInput={this.props.deleteInputAction}
+              <FailureEffectTasks
+                items={failureEffects}
+                toggleEditModal={this.toggleFailureEffectModal}
+                deleteFailureEffect={this.props.deleteFailureEffectAction}
               />
             </CardBody>
           </ExpansionPanelDetails>
         </ExpansionPanel>
-        <CreateInputModal
-          title={`${this.state.modalMode} Input`}
+        <CreateFailureEffectModal
+          title={`${this.state.modalMode.toUpperCase()} FailureEffect`}
           open={this.state.modal}
           modalMode={this.state.modalMode}
-          selectedFunction={this.state.functionId}
-          selectedInput={this.state.selectedInput}
-          handleClose={this.toggleInputModal}
-          onSubmit={this.populateInputAction()}
+          selectedFailureMode={this.props.item}
+          selectedFailureEffect={this.state.selectedFailureEffect}
+          handleClose={this.toggleFailureEffectModal}
+          onSubmit={this.populateFailureEffectAction()}
         />
       </GridItem>
     );
   }
 }
 
-InputElement.propTypes = {
+FailureEffectElement.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  inputs: state.projectDetailReducer.inputs,
+  failureEffects: state.projectDetailReducer.failureEffects,
   functions: state.projectDetailReducer.functions
 });
 
 export default connect(
   mapStateToProps,
   {
-    getInputsAction,
-    createInputAction,
-    updateInputAction,
-    deleteInputAction
+    getFailureEffectsAction,
+    createFailureEffectAction,
+    updateFailureEffectAction,
+    deleteFailureEffectAction
   }
-)(withStyles(styles)(InputElement));
+)(withStyles(styles)(FailureEffectElement));

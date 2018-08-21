@@ -7,7 +7,7 @@ export function inputNormalizer(inputs) {
 export function singleInputNormalizer(project) {
   return {
     id: project["@rid"] ? project["@rid"].replace("#", "") : null,
-    name: `Input`,
+    name: project.ID || `Input`,
     status: project.Status || "",
     type: project["@type"] || "",
     author: project.Author || "",

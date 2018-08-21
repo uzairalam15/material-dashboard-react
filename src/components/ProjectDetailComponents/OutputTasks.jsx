@@ -72,12 +72,24 @@ class OutputTasks extends React.PureComponent {
     this.state = { open: false };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.state.open && nextProps.index !== nextProps.openIndex) {
+      this.setState({
+        open: false
+      });
+    }
+  }
+
   toggleRow = () => {
     this.checkSubFunctions(!this.state.open);
   };
 
   checkSubFunctions = rowState => {
     const state = { open: rowState };
+    if (rowState) {
+      this.props.updateIndex(this.props.index);
+      this.props.getFailureModesAction(this.props.item.id);
+    }
     // const { item } = this.props;
     // if (rowState && !item.subProFetched) {
     //   this.props.getFunctionsAction(item.id);

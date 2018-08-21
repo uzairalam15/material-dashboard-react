@@ -32,7 +32,7 @@ const footerStyle = {
     borderTop: "1px solid #e7e7e7",
     padding: "0px 0",
     bottom: "0px",
-    width: "85%",
+    width: "100%",
     position: "fixed",
     zIndex: -1000,
     ...defaultFont

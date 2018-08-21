@@ -6,6 +6,12 @@ const ProgramsRoutes = [
     sidebarName: "Programs",
     navbarName: "Programs",
     component: ProgramView
+  },
+  {
+    path: "/",
+    sidebarName: "Programs",
+    navbarName: "Programs",
+    component: ProgramView
   }
 ];
 

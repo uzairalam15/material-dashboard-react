@@ -16,9 +16,7 @@ import Icon from "@material-ui/core/Icon";
 
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
-import FunctionElement from "./FunctionElement.jsx";
-import InputElement from "./InputElement.jsx";
-import OutputElement from "./OutputElement.jsx";
+import FailureCauseTabs from "./FailureCauseTabs.jsx";
 
 const styles = theme => ({
   button: {
@@ -68,18 +66,10 @@ const styles = theme => ({
   }
 });
 
-class ItemElement extends React.PureComponent {
+class FailureCauseTasks extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = { open: false };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.state.open && nextProps.index !== nextProps.openIndex) {
-      this.setState({
-        open: false
-      });
-    }
   }
 
   toggleRow = () => {
@@ -88,26 +78,25 @@ class ItemElement extends React.PureComponent {
 
   checkSubFunctions = rowState => {
     const state = { open: rowState };
-    const { item } = this.props;
-    if (rowState && !item.subProFetched) {
-      this.props.updateIndex(this.props.index);
-      this.props.getFunctionsAction(item.id);
-    }
+    // const { item } = this.props;
+    // if (rowState && !item.subProFetched) {
+    //   this.props.getFunctionsAction(item.id);
+    // }
     this.setState(state);
   };
 
   delete = e => {
     e.stopPropagation();
-    this.props.deleteItem(this.props.item.id);
+    this.props.deleteFailureCause(this.props.item.id);
   };
 
-  toggleItemModal = e => {
+  toggleFailureCauseModal = e => {
     e.stopPropagation();
-    this.props.toggleItemModal(null, "update", this.props.item);
+    this.props.toggleFailureCauseModal(null, "update", this.props.item);
   };
 
   render() {
-    const { classes, item, openIndex } = this.props;
+    const { classes, item } = this.props;
     const { open } = this.state;
     return (
       <GridItem xs={12} sm={12} md={12}>
@@ -124,7 +113,9 @@ class ItemElement extends React.PureComponent {
             <CardHeader style={{ width: "100%", margin: 6 }} color="info">
               <Grid container>
                 <GridItem xs={10} lg={10} md={10} style={{ paddingLeft: 0 }}>
-                  <h4 className={classes.cardTitleWhite}>Item: {item.name}</h4>
+                  <h4 className={classes.cardTitleWhite}>
+                    FailureCause: {item.name}
+                  </h4>
                   <p className={classes.cardCategoryWhite}>
                     Expand to create and view info
                   </p>
@@ -136,7 +127,7 @@ class ItemElement extends React.PureComponent {
                     color="primary"
                     aria-label="Update"
                     className={classes.button}
-                    onClick={this.toggleItemModal}
+                    onClick={this.toggleFailureCauseModal}
                   >
                     <Icon>edit_icon</Icon>
                   </Button>
@@ -159,19 +150,8 @@ class ItemElement extends React.PureComponent {
               root: classes.expansionDetailRoot
             }}
           >
-            <CardBody style={{ padding: 0 }}>
-              {/* <Tasks
-                item={item}
-                fetchProjectDetail={this.props.fetchProjectDetail}
-                subProjects={item.subProjects}
-                toggleSubProjectModal={this.toggleSubProjectModal}
-                deleteSubProject={deleteSubProject}
-              /> */}
-              <Grid container>
-                <FunctionElement openIndex={openIndex} item={this.props.item} />
-                <InputElement openIndex={openIndex} item={this.props.item} />
-                <OutputElement openIndex={openIndex} item={this.props.item} />
-              </Grid>
+            <CardBody style={{ padding: 0, paddingBottom: 10 }}>
+              <FailureCauseTabs item={this.props.item} />
             </CardBody>
           </ExpansionPanelDetails>
         </ExpansionPanel>
@@ -180,8 +160,8 @@ class ItemElement extends React.PureComponent {
   }
 }
 
-ItemElement.propTypes = {
+FailureCauseTasks.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(ItemElement);
+export default withStyles(styles)(FailureCauseTasks);

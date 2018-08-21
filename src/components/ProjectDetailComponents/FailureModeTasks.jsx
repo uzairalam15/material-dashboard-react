@@ -16,6 +16,8 @@ import Icon from "@material-ui/core/Icon";
 
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
+import FailureEffectElement from "./FailureEffectElement.jsx";
+import FailureCauseElement from "./FailureCauseElement.jsx";
 
 const styles = theme => ({
   button: {
@@ -149,8 +151,9 @@ class FailureModeTasks extends React.PureComponent {
               root: classes.expansionDetailRoot
             }}
           >
-            <CardBody style={{ padding: 0 }}>
-              {/* /<FailureModeElement item={item} /> */}
+            <CardBody style={{ padding: 0, paddingBottom: 10 }}>
+              <FailureEffectElement item={item} />
+              <FailureCauseElement item={item} />
             </CardBody>
           </ExpansionPanelDetails>
         </ExpansionPanel>

@@ -18,6 +18,36 @@ import {
   DELETE_FAILURE_MODE_SUCCESS
 } from "constants/FailureModeTypes";
 import {
+  GET_FAILURE_EFFECTS_SUCCESS,
+  ADD_FAILURE_EFFECT_SUCCESS,
+  UPDATE_FAILURE_EFFECT_SUCCESS,
+  DELETE_FAILURE_EFFECT_SUCCESS
+} from "constants/FailureEffectTypes";
+import {
+  GET_FAILURE_CAUSES_SUCCESS,
+  ADD_FAILURE_CAUSE_SUCCESS,
+  UPDATE_FAILURE_CAUSE_SUCCESS,
+  DELETE_FAILURE_CAUSE_SUCCESS
+} from "constants/FailureCauseTypes";
+import {
+  GET_NOISE_FACTORS_SUCCESS,
+  ADD_NOISE_FACTOR_SUCCESS,
+  UPDATE_NOISE_FACTOR_SUCCESS,
+  DELETE_NOISE_FACTOR_SUCCESS
+} from "constants/NoiseFactorTypes";
+import {
+  GET_PREVENTION_CONTROLS_SUCCESS,
+  ADD_PREVENTION_CONTROL_SUCCESS,
+  UPDATE_PREVENTION_CONTROL_SUCCESS,
+  DELETE_PREVENTION_CONTROL_SUCCESS
+} from "constants/PreventionControlTypes";
+import {
+  GET_SAFETY_REQUIREMENTS_SUCCESS,
+  ADD_SAFETY_REQUIREMENT_SUCCESS,
+  UPDATE_SAFETY_REQUIREMENT_SUCCESS,
+  DELETE_SAFETY_REQUIREMENT_SUCCESS
+} from "constants/SafetyRequirementTypes";
+import {
   SET_PROJECT,
   GET_INPUTS_SUCCESS,
   GET_OUTPUTS_SUCCESS,
@@ -27,11 +57,7 @@ import {
   UPDATE_OUTPUT_SUCCESS,
   DELETE_INPUT_SUCCESS,
   DELETE_OUTPUT_SUCCESS,
-  TOGGLE_LOADER,
-  GET_FAILURE_EFFECTS_SUCCESS,
-  GET_FAILURE_CAUSES_SUCCESS,
-  ADD_FAILURE_EFFECT_SUCCESS,
-  ADD_FAILURE_CAUSE_SUCCESS
+  TOGGLE_LOADER
 } from "constants/ProjectTypes";
 import initialState from "../store/initialState";
 import {
@@ -101,6 +127,39 @@ export default function projectDetailReducer(
   action
 ) {
   switch (action.type) {
+    case "CLEAR_PROJECT":
+      return Object.assign({}, state, initialState.projectDetailReducer);
+
+    case "CLEAR_OUTPUT":
+      return Object.assign({}, state, initialState, {
+        failureModes: [],
+        failureCauses: [],
+        failureEffects: [],
+        noiseFactors: [],
+        preventionControls: [],
+        safetyRequirements: []
+      });
+
+    case "CLEAR_CAUSE":
+      return Object.assign({}, state, initialState, {
+        noiseFactors: [],
+        preventionControls: [],
+        safetyRequirements: []
+      });
+
+    case "CLEAR_ITEM":
+      return Object.assign({}, state, {
+        functions: [],
+        inputs: [],
+        outputs: [],
+        failureModes: [],
+        failureCauses: [],
+        failureEffects: [],
+        noiseFactors: [],
+        preventionControls: [],
+        safetyRequirements: []
+      });
+
     case TOGGLE_LOADER:
       return Object.assign({}, state, {
         loader: !state.loader
@@ -208,6 +267,105 @@ export default function projectDetailReducer(
     case DELETE_FAILURE_MODE_SUCCESS:
       return Object.assign({}, state, {
         failureModes: removeItem(state.failureModes, action.id)
+      });
+
+    case GET_SAFETY_REQUIREMENTS_SUCCESS:
+      return Object.assign({}, state, {
+        safetyRequirements: action.data
+      });
+
+    case ADD_SAFETY_REQUIREMENT_SUCCESS:
+      return Object.assign({}, state, {
+        safetyRequirements: [action.data, ...state.safetyRequirements]
+      });
+
+    case UPDATE_SAFETY_REQUIREMENT_SUCCESS:
+      return Object.assign({}, state, {
+        safetyRequirements: updateItem(state.safetyRequirements, action.data)
+      });
+
+    case DELETE_SAFETY_REQUIREMENT_SUCCESS:
+      return Object.assign({}, state, {
+        safetyRequirements: removeItem(state.safetyRequirements, action.id)
+      });
+
+    case GET_PREVENTION_CONTROLS_SUCCESS:
+      return Object.assign({}, state, {
+        preventionControls: action.data
+      });
+
+    case ADD_PREVENTION_CONTROL_SUCCESS:
+      return Object.assign({}, state, {
+        preventionControls: [action.data, ...state.preventionControls]
+      });
+
+    case UPDATE_PREVENTION_CONTROL_SUCCESS:
+      return Object.assign({}, state, {
+        preventionControls: updateItem(state.preventionControls, action.data)
+      });
+
+    case DELETE_PREVENTION_CONTROL_SUCCESS:
+      return Object.assign({}, state, {
+        preventionControls: removeItem(state.preventionControls, action.id)
+      });
+
+    case GET_NOISE_FACTORS_SUCCESS:
+      return Object.assign({}, state, {
+        noiseFactors: action.data
+      });
+
+    case ADD_NOISE_FACTOR_SUCCESS:
+      return Object.assign({}, state, {
+        noiseFactors: [action.data, ...state.noiseFactors]
+      });
+
+    case UPDATE_NOISE_FACTOR_SUCCESS:
+      return Object.assign({}, state, {
+        noiseFactors: updateItem(state.noiseFactors, action.data)
+      });
+
+    case DELETE_NOISE_FACTOR_SUCCESS:
+      return Object.assign({}, state, {
+        noiseFactors: removeItem(state.noiseFactors, action.id)
+      });
+
+    case GET_FAILURE_EFFECTS_SUCCESS:
+      return Object.assign({}, state, {
+        failureEffects: action.data
+      });
+
+    case ADD_FAILURE_EFFECT_SUCCESS:
+      return Object.assign({}, state, {
+        failureEffects: [action.data, ...state.failureEffects]
+      });
+
+    case UPDATE_FAILURE_EFFECT_SUCCESS:
+      return Object.assign({}, state, {
+        failureEffects: updateItem(state.failureEffects, action.data)
+      });
+
+    case DELETE_FAILURE_EFFECT_SUCCESS:
+      return Object.assign({}, state, {
+        failureEffects: removeItem(state.failureEffects, action.id)
+      });
+    case GET_FAILURE_CAUSES_SUCCESS:
+      return Object.assign({}, state, {
+        failureCauses: action.data
+      });
+
+    case ADD_FAILURE_CAUSE_SUCCESS:
+      return Object.assign({}, state, {
+        failureCauses: [action.data, ...state.failureCauses]
+      });
+
+    case UPDATE_FAILURE_CAUSE_SUCCESS:
+      return Object.assign({}, state, {
+        failureCauses: updateItem(state.failureCauses, action.data)
+      });
+
+    case DELETE_FAILURE_CAUSE_SUCCESS:
+      return Object.assign({}, state, {
+        failureCauses: removeItem(state.failureCauses, action.id)
       });
 
     // case SET_PROJECT:
