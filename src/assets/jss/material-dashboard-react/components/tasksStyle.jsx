@@ -14,9 +14,11 @@ const tasksStyle = {
   },
   tableRow: {
     position: "relative",
-    borderBottom: "1px solid #dddddd"
+    borderBottom: "1px solid #dddddd",
+    padding: 10
   },
   tableActions: {
+    justifyContent: "flex-end",
     display: "flex",
     border: "none",
     padding: "12px 8px !important",
@@ -28,7 +30,8 @@ const tasksStyle = {
     verticalAlign: "middle",
     border: "none",
     lineHeight: "1.42857143",
-    fontSize: "14px"
+    fontSize: "16px",
+    fontWeight: "400"
   },
   tableActionButton: {
     width: "27px",

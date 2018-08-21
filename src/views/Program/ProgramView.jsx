@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import Grid from "@material-ui/core/Grid";
@@ -23,7 +24,8 @@ import {
   getProgramsAction,
   createProgramAction,
   updateProgramAction,
-  deleteProgramAction
+  deleteProgramAction,
+  setSelectedProgram
 } from "actions/ProgramActions";
 
 const styles = theme => ({
@@ -69,7 +71,8 @@ class Programs extends React.PureComponent {
   }
 
   fetchProjects = id => {
-    this.props.getProjectsAction(id);
+    this.props.setSelectedProgram(id);
+    this.props.history.push("/projects");
   };
 
   deleteProgram = id => {
@@ -177,6 +180,7 @@ export default connect(
     getProgramsAction,
     createProgramAction,
     updateProgramAction,
-    deleteProgramAction
+    deleteProgramAction,
+    setSelectedProgram
   }
-)(withStyles(styles)(Programs));
+)(withRouter(withStyles(styles)(Programs)));

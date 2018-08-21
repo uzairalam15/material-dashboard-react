@@ -1,4 +1,5 @@
 import ProjectView from "views/Project/ProjectView.jsx";
+import ProjectDetailView from "views/Project/ProjectDetailView.jsx";
 
 const ProjectsRoutes = [
   {
@@ -7,7 +8,12 @@ const ProjectsRoutes = [
     navbarName: "Projects",
     component: ProjectView
   },
-  { redirect: true, path: "/", to: "/programs", navbarName: "Redirect" }
+  {
+    path: "/projectDetails",
+    sidebarName: "projectDetails",
+    navbarName: "projectDetails",
+    component: ProjectDetailView
+  }
 ];
 
 export default ProjectsRoutes;

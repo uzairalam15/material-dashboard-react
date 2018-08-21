@@ -1,96 +1,83 @@
-import Request from "superagent";
+import ApiService from "utils/apiService";
+import ErrorService from "utils/errorService";
 import {
   getFunctionsSuccess,
-  getSubFunctionsAction,
-  getSubFunctionsSuccess,
   addFunctionSuccess,
-  addSubFunctionSuccess
+  updateFunctionSuccess,
+  deleteFunctionSuccess
 } from "actions/FunctionActions";
-import { setMessage } from "actions/ProjectActions";
-import { REQUEST_TIMEOUT } from "constants/AppConstants";
 import { appUrls } from "constants/Urls";
 import {
-  functionNormalizer,
-  subFunctionNormalizer,
   singleFunctionNormalizer,
-  singleSubFunctionNormalizer
+  functionNormalizer
 } from "utils/normalizers/functionNormalizers";
 
-export const getFunctions = id => {
-  const url = appUrls.FUNCTION.GETALL.replace("{id}", id);
-  return dispatch => {
-    Request.get(url)
-      .auth("webuser", "xmYuiV90$")
-      .end((err, res) => {
-        if (!err) {
-          const data = JSON.parse(res.text);
-          dispatch(getFunctionsSuccess(functionNormalizer(data.result)));
-        } else {
-          const errMessage = err.response.text;
-          dispatch(setMessage({ color: "danger", message: errMessage }));
-        }
-      });
-  };
-};
+const ApiServiceInstance = new ApiService(true);
+const ErrorServiceInstance = new ErrorService();
 
-export const getSubFunctions = id => {
-  const url = appUrls.FUNCTION.GETALLSUB.replace("{id}", id);
+export const getFunctions = id => {
+  const urlObject = appUrls.FUNCTION.GETALL;
   return dispatch => {
-    Request.get(url)
-      .auth("webuser", "xmYuiV90$")
-      .end((err, res) => {
+    ApiServiceInstance[urlObject.type](
+      urlObject.url.replace("{id}", id),
+      (err, res) => {
         if (!err) {
-          const data = JSON.parse(res.text);
-          dispatch(
-            getSubFunctionsSuccess(subFunctionNormalizer(data.result), id)
-          );
+          const newData = JSON.parse(res.text);
+          dispatch(getFunctionsSuccess(functionNormalizer(newData.result)));
         } else {
-          const errMessage = err.response.text;
-          dispatch(setMessage({ color: "danger", message: errMessage }));
+          ErrorServiceInstance.error(err, dispatch);
         }
-      });
+      }
+    );
   };
 };
 
 export const createFunction = data => {
-  const url = appUrls.FUNCTION.ADD;
+  const urlObject = appUrls.FUNCTION.ADD;
   return dispatch => {
-    Request.post(url)
-      .auth("webuser", "xmYuiV90$")
-      .send(data)
-      .end((err, res) => {
-        if (!err) {
-          const response = JSON.parse(res.text).result[0];
-          console.log(data);
-          dispatch(addFunctionSuccess(singleFunctionNormalizer(response)));
-        } else {
-          const errMessage = err.response.text;
-          dispatch(setMessage({ color: "danger", message: errMessage }));
-        }
-      });
+    ApiServiceInstance[urlObject.type](urlObject.url, data, (err, res) => {
+      if (!err) {
+        const newData = JSON.parse(res.text);
+        dispatch(
+          addFunctionSuccess(singleFunctionNormalizer(newData.result[0]))
+        );
+      } else {
+        ErrorServiceInstance.error(err, dispatch);
+      }
+    });
   };
 };
 
-export const createSubFunction = data => {
-  const url = appUrls.FUNCTION.ADDSUB;
+export const updateFunction = (data, id) => {
+  const urlObject = appUrls.FUNCTION.UPDATE;
   return dispatch => {
-    Request.post(url)
-      .auth("webuser", "xmYuiV90$")
-      .send(data)
-      .end((err, res) => {
+    ApiServiceInstance[urlObject.type](
+      urlObject.url.replace("{id}", id),
+      data,
+      (err, res) => {
         if (!err) {
-          const response = JSON.parse(res.text).result[0];
-          console.log(data);
-          dispatch(
-            addSubFunctionSuccess(
-              singleSubFunctionNormalizer(response),
-              data.FunctionRID
-            )
-          );
+          const newData = JSON.parse(res.text);
+          dispatch(updateFunctionSuccess(singleFunctionNormalizer(newData)));
         } else {
-          const errMessage = err.response.text;
-          dispatch(setMessage({ color: "danger", message: errMessage }));
+          ErrorServiceInstance.error(err, dispatch);
         }
-      });
+      }
+    );
+  };
+};
+
+export const deleteFunction = id => {
+  const urlObject = appUrls.FUNCTION.DELETE;
+  return dispatch => {
+    ApiServiceInstance[urlObject.type](
+      urlObject.url.replace("{id}", id),
+      (err, res) => {
+        if (!err) {
+          dispatch(deleteFunctionSuccess(id));
+        } else {
+          ErrorServiceInstance.error(err, dispatch);
+        }
+      }
+    );
   };
 };

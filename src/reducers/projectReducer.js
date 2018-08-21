@@ -5,14 +5,17 @@ import {
   ADD_SUB_PROJECT_SUCCESS,
   UPDATE_SUB_PROJECT_SUCCESS,
   GET_SUB_PROJECTS_SUCCESS,
-  ADD_SUB_PROJECTS_SUCCESS
+  DELETE_PROJECT_SUCCESS,
+  DELETE_SUB_PROJECT_SUCCESS,
+  SET_SELECTED_PROJECT
 } from "constants/ProjectTypes";
 import initialState from "../store/initialState";
 import {
   getIndexAndObjectofId,
   editItemAtIndex,
   getObjectOfId,
-  getIndexOfId
+  getIndexOfId,
+  removeItemAtIndex
 } from "utils/helpers";
 
 function addSubProject(projects, newSubProject, projectId) {
@@ -49,6 +52,18 @@ function appendSubProjects(projects, subProjects, projectID) {
   return editItemAtIndex(projects, newElement, element.index);
 }
 
+function deleteProject(projects, id) {
+  const index = getIndexOfId(projects, id);
+  return removeItemAtIndex(projects, index);
+}
+
+function deleteSubProject(projects, projectId, id) {
+  const { object, index } = getIndexAndObjectofId(projects, projectId);
+  const subProjectIndex = getIndexOfId(object.subProjects, id);
+  object.subProjects = removeItemAtIndex(object.subProjects, subProjectIndex);
+  return editItemAtIndex(projects, object, index);
+}
+
 export default function projectReducer(
   state = initialState.projectReducer,
   action
@@ -81,7 +96,26 @@ export default function projectReducer(
 
     case UPDATE_SUB_PROJECT_SUCCESS:
       return Object.assign({}, state, {
-        projects: updateSubProject(state.projects, action.data, action.id)
+        projects: updateSubProject(
+          state.projects,
+          action.data,
+          action.projectId
+        )
+      });
+
+    case DELETE_PROJECT_SUCCESS:
+      return Object.assign({}, state, {
+        projects: deleteProject(state.projects, action.id)
+      });
+
+    case DELETE_SUB_PROJECT_SUCCESS:
+      return Object.assign({}, state, {
+        projects: deleteSubProject(state.projects, action.projectId, action.id)
+      });
+
+    case SET_SELECTED_PROJECT:
+      return Object.assign({}, state, {
+        selectedProject: action.data
       });
 
     default:

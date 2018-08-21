@@ -2,7 +2,8 @@ import {
   GET_PROGRAMS_SUCCESS,
   ADD_PROGRAM_SUCCESS,
   UPDATE_PROGRAM_SUCCESS,
-  DELETE_PROGRAM_SUCCESS
+  DELETE_PROGRAM_SUCCESS,
+  SET_SELECTED_PROGRAM
 } from "constants/ProgramTypes";
 import {
   getPrograms,
@@ -23,6 +24,11 @@ export const addProgramSuccess = data => ({
 
 export const deleteProgramSuccess = id => ({
   type: DELETE_PROGRAM_SUCCESS,
+  id
+});
+
+export const setSelectedProgram = id => ({
+  type: SET_SELECTED_PROGRAM,
   id
 });
 

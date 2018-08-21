@@ -13,7 +13,12 @@ const Root = props => {
         <Switch>
           {indexRoutes.map((prop, key) => {
             return (
-              <Route path={prop.path} component={prop.component} key={key} />
+              <Route
+                path={prop.path}
+                exact={true}
+                component={prop.component}
+                key={key}
+              />
             );
           })}
         </Switch>

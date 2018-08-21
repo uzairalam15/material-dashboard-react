@@ -6,8 +6,7 @@ const ProgramsRoutes = [
     sidebarName: "Programs",
     navbarName: "Programs",
     component: ProgramView
-  },
-  { redirect: true, path: "/", to: "/programs", navbarName: "Redirect" }
+  }
 ];
 
 export default ProgramsRoutes;

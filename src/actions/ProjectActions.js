@@ -23,13 +23,18 @@ import {
   ADD_FAILURE_CAUSE_SUCCESS,
   ADD_FAILURE_EFFECT_SUCCESS,
   UNSET_MESSAGE,
-  SET_MESSAGE
+  SET_MESSAGE,
+  SET_SELECTED_PROJECT
 } from "constants/ProjectTypes";
 import {
   getProjects,
   getSubProjects,
   createProject,
   createSubProject,
+  updateProject,
+  updateSubProject,
+  deleteProject,
+  deleteSubProject,
   setAndFetchProject,
   createInput,
   createOutput,
@@ -45,6 +50,11 @@ import {
 
 export const toggleLoader = () => ({
   type: TOGGLE_LOADER
+});
+
+export const setSelectedProject = data => ({
+  type: SET_SELECTED_PROJECT,
+  data
 });
 
 export const unsetMessage = () => ({
@@ -100,14 +110,15 @@ export const addProjectSuccess = data => ({
   data
 });
 
-export const deleteProjectSuccess = data => ({
+export const deleteProjectSuccess = id => ({
   type: DELETE_PROJECT_SUCCESS,
-  data
+  id
 });
 
-export const deleteSubProjectSuccess = data => ({
+export const deleteSubProjectSuccess = (id, projectId) => ({
   type: DELETE_SUB_PROJECT_SUCCESS,
-  data
+  projectId,
+  id
 });
 
 export const addSubProjectSuccess = (data, id) => ({
@@ -121,10 +132,10 @@ export const updateProjectSuccess = data => ({
   data
 });
 
-export const updateSubProjectSuccess = (data, id) => ({
+export const updateSubProjectSuccess = (data, projectId) => ({
   type: UPDATE_SUB_PROJECT_SUCCESS,
   data,
-  id
+  projectId
 });
 
 export const addInputSuccess = data => ({
@@ -168,18 +179,24 @@ export const getSubProjectsSuccess = (data, id) => ({
   id
 });
 
-export const getProjectsAction = () => getProjects();
-export const getSubProjectsAction = id => getSubProjects(id);
-export const getFailureModesAction = id => getFailureModes(id);
-export const getFailureEffectsAction = id => getFailureEffects(id);
-export const getFailureCausesAction = id => getFailureCauses(id);
-export const createFailureModeAction = data => createFailureMode(data);
-export const createFailureCauseAction = data => createFailureCause(data);
-export const createFailureEffectAction = data => createFailureEffect(data);
-export const getInputsAction = data => getInputs(data);
-export const getOutputsAction = data => getOutputs(data);
+export const getProjectsAction = id => getProjects(id);
 export const createProjectAction = data => createProject(data);
-export const createInputAction = data => createInput(data);
-export const createOutputAction = data => createOutput(data);
+export const updateProjectAction = (data, id) => updateProject(data, id);
+export const deleteProjectAction = id => deleteProject(id);
+export const getSubProjectsAction = id => getSubProjects(id);
 export const createSubProjectAction = data => createSubProject(data);
-export const setAndFetchProjectAction = data => setAndFetchProject(data);
+export const updateSubProjectAction = (data, id, projectId) =>
+  updateSubProject(data, id, projectId);
+export const deleteSubProjectAction = (id, projectId) =>
+  deleteSubProject(id, projectId);
+// export const getFailureModesAction = id => getFailureModes(id);
+// export const getFailureEffectsAction = id => getFailureEffects(id);
+// export const getFailureCausesAction = id => getFailureCauses(id);
+// export const createFailureModeAction = data => createFailureMode(data);
+// export const createFailureCauseAction = data => createFailureCause(data);
+// export const createFailureEffectAction = data => createFailureEffect(data);
+// export const getInputsAction = data => getInputs(data);
+// export const getOutputsAction = data => getOutputs(data);
+// export const createInputAction = data => createInput(data);
+// export const createOutputAction = data => createOutput(data);
+// export const setAndFetchProjectAction = data => setAndFetchProject(data);

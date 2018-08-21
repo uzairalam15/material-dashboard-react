@@ -2,7 +2,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
@@ -17,7 +17,7 @@ import projectRoutes from "routes/project.jsx";
 
 import programStyle from "assets/jss/material-dashboard-react/layouts/programStyle.jsx";
 
-import { unsetMessage } from "actions/ProjectActions";
+import { unsetMessage, getProjectsAction } from "actions/ProjectActions";
 
 const switchRoutes = (
   <Switch>
@@ -38,6 +38,9 @@ class ProjectContainer extends React.Component {
     if (navigator.platform.indexOf("Win") > -1) {
       const ps = new PerfectScrollbar(this.refs.mainPanel);
     }
+    if (!this.props.selectedProgram) {
+      this.props.history.push("/programs");
+    }
   }
   componentDidUpdate(e) {
     if (e.history.location.pathname !== e.location.pathname) {
@@ -50,7 +53,7 @@ class ProjectContainer extends React.Component {
       <div className={classes.wrapper}>
         <div className={classes.mainPanel} ref="mainPanel">
           <Header
-            routes={programRoutes}
+            routes={projectRoutes}
             handleDrawerToggle={this.handleDrawerToggle}
             {...rest}
           />
@@ -80,12 +83,14 @@ ProjectContainer.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  notification: state.notificationReducer
+  notification: state.notificationReducer,
+  selectedProgram: state.programReducer.selectedProgram
 });
 
 export default connect(
   mapStateToProps,
   {
-    unsetMessage
+    unsetMessage,
+    getProjectsAction
   }
-)(withStyles(programStyle)(ProjectContainer));
+)(withRouter(withStyles(programStyle)(ProjectContainer)));

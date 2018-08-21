@@ -20,7 +20,7 @@ import programStyle from "assets/jss/material-dashboard-react/layouts/programSty
 import image from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/reactlogo.png";
 import { unsetMessage } from "actions/ProjectActions";
-import { getProgramsAction } from "actions/ProgramActions";
+import { getProgramsAction, setSelectedProgram } from "actions/ProgramActions";
 
 const switchRoutes = (
   <Switch>
@@ -37,6 +37,7 @@ class ProgramContainer extends React.Component {
     if (navigator.platform.indexOf("Win") > -1) {
       const ps = new PerfectScrollbar(this.refs.mainPanel);
     }
+    this.props.setSelectedProgram(null);
     this.props.getProgramsAction();
   }
   componentDidUpdate(e) {
@@ -87,6 +88,7 @@ export default connect(
   mapStateToProps,
   {
     unsetMessage,
-    getProgramsAction
+    getProgramsAction,
+    setSelectedProgram
   }
 )(withStyles(programStyle)(ProgramContainer));

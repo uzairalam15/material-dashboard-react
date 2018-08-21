@@ -9,7 +9,7 @@ export function singleProjectNormalizer(project) {
     id: project["@rid"] ? project["@rid"].replace("#", "") : null,
     name: project.Name || "",
     status: project.Status || "",
-    type: project["@type"] || "",
+    type: project.Type || "",
     author: project.Author || "",
     version: project["@version"] || 0,
     createdDate: project.CreateDate || null,
@@ -27,9 +27,10 @@ export function subProjectNormalizer(subProjects) {
 export function singleSubProjectNormalizer(project) {
   return {
     id: project["@rid"] ? project["@rid"].replace("#", "") : null,
-    name: `Sub Project`,
+    name: project.Name || `Sub Project`,
     status: project.Status || "",
-    type: project["@type"] || "",
+    type: project.Type || "",
+    subType: project.SubType || "",
     author: project.Author || "",
     version: project["@version"] || 0
   };

@@ -1,7 +1,9 @@
-import { setMessage } from "actions/ProjectActions";
+import { setMessage } from "actions/SharedActions";
 
 export default class ErrorService {
-  constructor() {}
+  constructor(messsage) {
+    this.message = messsage;
+  }
 
   error(err, dispatch) {
     const errMessage = err.response.text;

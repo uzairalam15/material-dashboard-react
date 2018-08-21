@@ -2,7 +2,8 @@ import {
   GET_PROGRAMS_SUCCESS,
   ADD_PROGRAM_SUCCESS,
   UPDATE_PROGRAM_SUCCESS,
-  DELETE_PROGRAM_SUCCESS
+  DELETE_PROGRAM_SUCCESS,
+  SET_SELECTED_PROGRAM
 } from "constants/ProgramTypes";
 import initialState from "../store/initialState";
 import {
@@ -46,6 +47,11 @@ export default function programReducer(
     case DELETE_PROGRAM_SUCCESS:
       return Object.assign({}, state, {
         programs: removeProgram(state.programs, action.id)
+      });
+
+    case SET_SELECTED_PROGRAM:
+      return Object.assign({}, state, {
+        selectedProgram: action.id || null
       });
 
     default:
