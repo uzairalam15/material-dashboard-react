@@ -31,6 +31,8 @@ import {
   deleteFailureModeAction
 } from "actions/FailureModeActions";
 
+import { clearMode } from "actions/SharedActions";
+
 const styles = theme => ({
   button: {
     margin: theme.spacing.unit,
@@ -88,6 +90,7 @@ class FailureModeElement extends React.PureComponent {
     this.state = {
       open: false,
       modal: false,
+      openIndex: null,
       modalMode: "create",
       selectedFailureMode: {}
     };
@@ -118,10 +121,16 @@ class FailureModeElement extends React.PureComponent {
 
   getFailureModeElements = failureModes => {
     if (failureModes.length) {
-      return failureModes.map(output => {
+      return failureModes.map((output, index) => {
         return (
           <FailureModeTasks
             item={output}
+            index={index}
+            openIndex={this.state.openIndex}
+            updateIndex={passedIndex => {
+              this.props.clearMode();
+              this.setState({ openIndex: passedIndex });
+            }}
             deleteFailureMode={this.props.deleteFailureModeAction}
             toggleFailureModeModal={this.toggleFailureModeModal}
           />
@@ -136,7 +145,7 @@ class FailureModeElement extends React.PureComponent {
     const { open } = this.state;
     return (
       <GridItem xs={12} sm={12} md={12}>
-        <CardBody style={{ padding: 0 }}>
+        <CardBody style={{ padding: 0, paddingBottom: 20 }}>
           <Grid container>
             <GridItem xs={12} sm={12} md={12} style={{ textAlign: "right" }}>
               <Button
@@ -182,6 +191,7 @@ export default connect(
     getFailureModesAction,
     createFailureModeAction,
     updateFailureModeAction,
-    deleteFailureModeAction
+    deleteFailureModeAction,
+    clearMode
   }
 )(withStyles(styles)(FailureModeElement));

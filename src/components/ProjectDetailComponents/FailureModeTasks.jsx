@@ -73,12 +73,23 @@ class FailureModeTasks extends React.PureComponent {
     this.state = { open: false };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.state.open && nextProps.openIndex !== nextProps.index) {
+      this.setState({
+        open: false
+      });
+    }
+  }
+
   toggleRow = () => {
     this.checkSubFunctions(!this.state.open);
   };
 
   checkSubFunctions = rowState => {
     const state = { open: rowState };
+    if (rowState) {
+      this.props.updateIndex(this.props.index);
+    }
     // const { item } = this.props;
     // if (rowState && !item.subProFetched) {
     //   this.props.getFunctionsAction(item.id);
@@ -111,7 +122,7 @@ class FailureModeTasks extends React.PureComponent {
             IconButtonProps={{ style: { zIndex: 1000 } }}
             expandIcon={<ExpandMoreIcon />}
           >
-            <CardHeader style={{ width: "100%", margin: 6 }} color="info">
+            <CardHeader style={{ width: "100%", margin: 6 }} color="primary">
               <Grid container>
                 <GridItem xs={10} lg={10} md={10} style={{ paddingLeft: 0 }}>
                   <h4 className={classes.cardTitleWhite}>
@@ -152,8 +163,8 @@ class FailureModeTasks extends React.PureComponent {
             }}
           >
             <CardBody style={{ padding: 0, paddingBottom: 10 }}>
-              <FailureEffectElement item={item} />
-              <FailureCauseElement item={item} />
+              <FailureEffectElement openIndex={this.state.open} item={item} />
+              <FailureCauseElement openIndex={this.state.open} item={item} />
             </CardBody>
           </ExpansionPanelDetails>
         </ExpansionPanel>

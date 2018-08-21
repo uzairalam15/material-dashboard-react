@@ -31,6 +31,8 @@ import {
   deleteFailureCauseAction
 } from "actions/FailureCauseActions";
 
+import { clearCause } from "actions/SharedActions";
+
 const styles = theme => ({
   button: {
     margin: theme.spacing.unit,
@@ -88,9 +90,18 @@ class FailureCauseElement extends React.PureComponent {
     this.state = {
       open: false,
       modal: false,
+      openIndex: null,
       modalMode: "create",
       selectedFailureCause: {}
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.openIndex) {
+      this.setState({
+        open: false
+      });
+    }
   }
 
   toggleRow = () => {
@@ -127,10 +138,16 @@ class FailureCauseElement extends React.PureComponent {
 
   getFailureCauseElements = failureCauses => {
     if (failureCauses.length) {
-      return failureCauses.map(output => {
+      return failureCauses.map((output, index) => {
         return (
           <FailureCauseTasks
             item={output}
+            index={index}
+            openIndex={this.state.openIndex}
+            updateIndex={passedIndex => {
+              this.props.clearCause();
+              this.setState({ openIndex: passedIndex });
+            }}
             deleteFailureCause={this.props.deleteFailureCauseAction}
             toggleFailureCauseModal={this.toggleFailureCauseModal}
           />
@@ -155,7 +172,7 @@ class FailureCauseElement extends React.PureComponent {
             IconButtonProps={{ style: { zIndex: 1000 } }}
             expandIcon={<ExpandMoreIcon />}
           >
-            <CardHeader style={{ width: "100%", margin: 6 }} color="info">
+            <CardHeader style={{ width: "100%", margin: 6 }} color="danger">
               <Grid container>
                 <GridItem xs={12} lg={12} md={12} style={{ paddingLeft: 0 }}>
                   <h4 className={classes.cardTitleWhite}>FailureCauses</h4>
@@ -171,7 +188,7 @@ class FailureCauseElement extends React.PureComponent {
               root: classes.expansionDetailRoot
             }}
           >
-            <CardBody style={{ padding: 0 }}>
+            <CardBody style={{ padding: 0, paddingBottom: 20 }}>
               <Grid container>
                 <GridItem
                   xs={12}
@@ -187,7 +204,7 @@ class FailureCauseElement extends React.PureComponent {
                     onClick={this.toggleFailureCauseModal}
                   >
                     <AddIcon className={classes.extendedIcon} />
-                    Create
+                    Create Failure Cause
                   </Button>
                 </GridItem>
               </Grid>
@@ -224,6 +241,7 @@ export default connect(
     getFailureCausesAction,
     createFailureCauseAction,
     updateFailureCauseAction,
-    deleteFailureCauseAction
+    deleteFailureCauseAction,
+    clearCause
   }
 )(withStyles(styles)(FailureCauseElement));

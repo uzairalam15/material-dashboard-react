@@ -93,6 +93,12 @@ class SafetyRequirementElement extends React.PureComponent {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.openIndex) {
+      nextProps.getSafetyRequirementsAction(this.props.item.id);
+    }
+  }
+
   componentDidMount() {
     this.props.getSafetyRequirementsAction(this.props.item.id);
   }
@@ -143,7 +149,7 @@ class SafetyRequirementElement extends React.PureComponent {
                 onClick={this.toggleSafetyRequirementModal}
               >
                 <AddIcon className={classes.extendedIcon} />
-                Create
+                Create Safety Requirement
               </Button>
             </GridItem>
           </Grid>

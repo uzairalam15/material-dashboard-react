@@ -93,6 +93,14 @@ class FailureEffectElement extends React.PureComponent {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.openIndex) {
+      this.setState({
+        open: false
+      });
+    }
+  }
+
   toggleRow = () => {
     if (!this.state.open) {
       this.props.getFailureEffectsAction(this.props.item.id);
@@ -155,7 +163,7 @@ class FailureEffectElement extends React.PureComponent {
             IconButtonProps={{ style: { zIndex: 1000 } }}
             expandIcon={<ExpandMoreIcon />}
           >
-            <CardHeader style={{ width: "100%", margin: 6 }} color="info">
+            <CardHeader style={{ width: "100%", margin: 6 }} color="warning">
               <Grid container>
                 <GridItem xs={12} lg={12} md={12} style={{ paddingLeft: 0 }}>
                   <h4 className={classes.cardTitleWhite}>FailureEffects</h4>
@@ -187,7 +195,7 @@ class FailureEffectElement extends React.PureComponent {
                     onClick={this.toggleFailureEffectModal}
                   >
                     <AddIcon className={classes.extendedIcon} />
-                    Create
+                    Create Failure Effect
                   </Button>
                 </GridItem>
               </Grid>

@@ -72,12 +72,23 @@ class FailureCauseTasks extends React.PureComponent {
     this.state = { open: false };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.state.open && nextProps.openIndex !== nextProps.index) {
+      this.setState({
+        open: false
+      });
+    }
+  }
+
   toggleRow = () => {
     this.checkSubFunctions(!this.state.open);
   };
 
   checkSubFunctions = rowState => {
     const state = { open: rowState };
+    if (rowState) {
+      this.props.updateIndex(this.props.index);
+    }
     // const { item } = this.props;
     // if (rowState && !item.subProFetched) {
     //   this.props.getFunctionsAction(item.id);
@@ -151,7 +162,10 @@ class FailureCauseTasks extends React.PureComponent {
             }}
           >
             <CardBody style={{ padding: 0, paddingBottom: 10 }}>
-              <FailureCauseTabs item={this.props.item} />
+              <FailureCauseTabs
+                openIndex={this.state.open}
+                item={this.props.item}
+              />
             </CardBody>
           </ExpansionPanelDetails>
         </ExpansionPanel>

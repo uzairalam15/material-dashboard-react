@@ -92,7 +92,7 @@ class OutputElement extends React.PureComponent {
       open: false,
       modal: false,
       openIndex: null,
-      functionId: null,
+      functionId: "",
       modalMode: "create",
       selectedOutput: {}
     };
@@ -130,7 +130,8 @@ class OutputElement extends React.PureComponent {
       this.props.getOutputsAction(value);
     }
     this.setState({
-      functionId: value
+      functionId: value,
+      openIndex: null
     });
   };
 
@@ -204,7 +205,7 @@ class OutputElement extends React.PureComponent {
               root: classes.expansionDetailRoot
             }}
           >
-            <CardBody style={{ padding: 0 }}>
+            <CardBody style={{ padding: 0, paddingBottom: 20 }}>
               <Grid container>
                 <GridItem xs={6} sm={6} md={6}>
                   <FormControl className={classes.formControl}>
@@ -230,16 +231,11 @@ class OutputElement extends React.PureComponent {
                     onClick={this.toggleOutputModal}
                   >
                     <AddIcon className={classes.extendedIcon} />
-                    Create
+                    Create Output
                   </Button>
                 </GridItem>
               </Grid>
               {this.getOutputElements(outputs)}
-              {/* <Tasks
-                items={outputs}
-                toggleEditModal={this.toggleOutputModal}
-                deleteOutput={this.props.deleteOutputAction}
-              /> */}
             </CardBody>
           </ExpansionPanelDetails>
         </ExpansionPanel>

@@ -72,7 +72,7 @@ class CreateFailureModeModal extends React.PureComponent {
     if (this.props.modalMode !== "create") {
       this.props.onSubmit(submitState, this.props.selectedSafetyRequirement.id);
     } else {
-      submitState.FailureModeEffectRID = this.props.selectedFailureCause.id;
+      submitState.FailureCauseRID = this.props.selectedFailureCause.id;
       this.props.onSubmit(submitState);
     }
     this.props.handleClose();

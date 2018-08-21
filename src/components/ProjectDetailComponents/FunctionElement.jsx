@@ -148,7 +148,7 @@ class FunctionElement extends React.PureComponent {
                   onClick={this.toggleFunctionModal}
                 >
                   <AddIcon className={classes.extendedIcon} />
-                  Create
+                  Create Function
                 </Button>
               </GridItem>
               <Tasks

@@ -130,6 +130,15 @@ export default function projectDetailReducer(
     case "CLEAR_PROJECT":
       return Object.assign({}, state, initialState.projectDetailReducer);
 
+    case "CLEAR_MODE":
+      return Object.assign({}, state, initialState, {
+        failureCauses: [],
+        failureEffects: [],
+        noiseFactors: [],
+        preventionControls: [],
+        safetyRequirements: []
+      });
+
     case "CLEAR_OUTPUT":
       return Object.assign({}, state, initialState, {
         failureModes: [],

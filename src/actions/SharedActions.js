@@ -24,3 +24,7 @@ export const clearOutput = () => ({
 export const clearCause = () => ({
   type: "CLEAR_CAUSE"
 });
+
+export const clearMode = () => ({
+  type: "CLEAR_MODE"
+});

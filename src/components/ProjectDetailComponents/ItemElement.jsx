@@ -159,14 +159,7 @@ class ItemElement extends React.PureComponent {
               root: classes.expansionDetailRoot
             }}
           >
-            <CardBody style={{ padding: 0 }}>
-              {/* <Tasks
-                item={item}
-                fetchProjectDetail={this.props.fetchProjectDetail}
-                subProjects={item.subProjects}
-                toggleSubProjectModal={this.toggleSubProjectModal}
-                deleteSubProject={deleteSubProject}
-              /> */}
+            <CardBody style={{ padding: 0, paddingBottom: 20 }}>
               <Grid container>
                 <FunctionElement openIndex={openIndex} item={this.props.item} />
                 <InputElement openIndex={openIndex} item={this.props.item} />

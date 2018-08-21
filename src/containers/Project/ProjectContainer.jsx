@@ -29,6 +29,14 @@ const switchRoutes = (
   </Switch>
 );
 
+const headerRoutes = [
+  {
+    name: "Programs",
+    path: "/programs"
+  },
+  { name: "Projects", current: true, path: "#" }
+];
+
 class ProjectContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -53,7 +61,7 @@ class ProjectContainer extends React.Component {
       <div className={classes.wrapper}>
         <div className={classes.mainPanel} ref="mainPanel">
           <Header
-            routes={projectRoutes}
+            routes={headerRoutes}
             handleDrawerToggle={this.handleDrawerToggle}
             {...rest}
           />

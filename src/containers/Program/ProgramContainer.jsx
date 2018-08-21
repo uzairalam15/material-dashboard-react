@@ -32,6 +32,14 @@ const switchRoutes = (
   </Switch>
 );
 
+const headerRoutes = [
+  {
+    name: "Programs",
+    path: "#",
+    current: true
+  }
+];
+
 class ProgramContainer extends React.Component {
   componentDidMount() {
     if (navigator.platform.indexOf("Win") > -1) {
@@ -51,7 +59,7 @@ class ProgramContainer extends React.Component {
       <div className={classes.wrapper}>
         <div className={classes.mainPanel} ref="mainPanel">
           <Header
-            routes={programRoutes}
+            routes={headerRoutes}
             handleDrawerToggle={this.handleDrawerToggle}
             {...rest}
           />

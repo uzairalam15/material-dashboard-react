@@ -88,7 +88,7 @@ class InputElement extends React.PureComponent {
     this.state = {
       open: false,
       modal: false,
-      functionId: null,
+      functionId: "",
       modalMode: "create",
       selectedInput: {}
     };
@@ -187,7 +187,6 @@ class InputElement extends React.PureComponent {
                     </InputLabel>
                     <Select
                       value={this.state.functionId}
-                      id={"functionId"}
                       name={"functionId"}
                       onChange={this.handleChange}
                     >
@@ -204,7 +203,7 @@ class InputElement extends React.PureComponent {
                     onClick={this.toggleInputModal}
                   >
                     <AddIcon className={classes.extendedIcon} />
-                    Create
+                    Create Input
                   </Button>
                 </GridItem>
               </Grid>

@@ -45,15 +45,30 @@ class Tasks extends React.Component {
           tabs={[
             {
               tabName: "Noise Factor",
-              tabContent: <NoiseFactorElement item={this.props.item} />
+              tabContent: (
+                <NoiseFactorElement
+                  item={this.props.item}
+                  openIndex={this.props.openIndex}
+                />
+              )
             },
             {
               tabName: "Prevention Control",
-              tabContent: <PreventionControlElement item={this.props.item} />
+              tabContent: (
+                <PreventionControlElement
+                  item={this.props.item}
+                  openIndex={this.props.openIndex}
+                />
+              )
             },
             {
               tabName: "Safety Requirements",
-              tabContent: <SafetyRequirementElement item={this.props.item} />
+              tabContent: (
+                <SafetyRequirementElement
+                  item={this.props.item}
+                  openIndex={this.props.openIndex}
+                />
+              )
             }
           ]}
         />

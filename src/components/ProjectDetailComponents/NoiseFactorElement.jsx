@@ -93,6 +93,12 @@ class NoiseFactorElement extends React.PureComponent {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.openIndex) {
+      nextProps.getNoiseFactorsAction(this.props.item.id);
+    }
+  }
+
   componentDidMount() {
     this.props.getNoiseFactorsAction(this.props.item.id);
   }
@@ -143,7 +149,7 @@ class NoiseFactorElement extends React.PureComponent {
                 onClick={this.toggleNoiseFactorModal}
               >
                 <AddIcon className={classes.extendedIcon} />
-                Create
+                Create Noise Factor
               </Button>
             </GridItem>
           </Grid>

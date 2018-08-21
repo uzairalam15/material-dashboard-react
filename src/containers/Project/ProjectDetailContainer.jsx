@@ -29,15 +29,24 @@ const switchRoutes = (
   </Switch>
 );
 
+const headerRoutes = [
+  {
+    name: "Programs",
+    path: "/programs"
+  },
+  { name: "Projects", path: "/Projects" },
+  { name: "Project Info", current: true, path: "#" }
+];
+
 class ProjectContainerDetail extends React.Component {
   constructor(props) {
     super(props);
   }
 
   componentDidMount() {
-    if (navigator.platform.indexOf("Win") > -1) {
-      const ps = new PerfectScrollbar(this.refs.mainPanel);
-    }
+    // if (navigator.platform.indexOf("Win") > -1) {
+    //   const ps = new PerfectScrollbar(this.refs.mainPanel);
+    // }
     if (!this.props.selectedProgram) {
       this.props.history.push("/programs");
     }
@@ -53,7 +62,7 @@ class ProjectContainerDetail extends React.Component {
       <div className={classes.wrapper}>
         <div className={classes.mainPanel} ref="mainPanel">
           <Header
-            routes={projectRoutes}
+            routes={headerRoutes}
             handleDrawerToggle={this.handleDrawerToggle}
             {...rest}
           />

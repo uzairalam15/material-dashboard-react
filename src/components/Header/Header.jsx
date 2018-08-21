@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import AppBar from "@material-ui/core/AppBar";
@@ -16,15 +17,22 @@ import Button from "components/CustomButtons/Button";
 import headerStyle from "assets/jss/material-dashboard-react/components/headerStyle.jsx";
 
 function Header({ ...props }) {
-  function makeBrand() {
-    var name;
-    props.routes.map((prop, key) => {
-      if (prop.path === props.location.pathname) {
-        name = prop.navbarName;
-      }
-      return null;
+  function getHeaderRoutes(routes) {
+    return routes.map(route => {
+      return (
+        <Button
+          color={route.current ? "info" : "transparent"}
+          onClick={() => {
+            props.history.push(route.path);
+          }}
+          disabled={!!route.current}
+          style={{ color: route.current ? "white" : "black" }}
+          className={classes.title}
+        >
+          {route.name}
+        </Button>
+      );
     });
-    return name;
   }
   const { classes, color } = props;
   const appBarClasses = classNames({
@@ -41,9 +49,7 @@ function Header({ ...props }) {
             onClick={props.handleDrawerToggle}
           /> */}
           {/* Here we create navbar brand, based on route name */}
-          <Button color="transparent" href="#" className={classes.title}>
-            {makeBrand()}
-          </Button>
+          {getHeaderRoutes(props.routes)}
         </div>
         <Hidden smDown implementation="css">
           <HeaderLinks />
@@ -58,4 +64,4 @@ Header.propTypes = {
   color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"])
 };
 
-export default withStyles(headerStyle)(Header);
+export default withRouter(withStyles(headerStyle)(Header));

@@ -122,7 +122,7 @@ class OutputTasks extends React.PureComponent {
             IconButtonProps={{ style: { zIndex: 1000 } }}
             expandIcon={<ExpandMoreIcon />}
           >
-            <CardHeader style={{ width: "100%", margin: 6 }} color="info">
+            <CardHeader style={{ width: "100%", margin: 6 }} color="success">
               <Grid container>
                 <GridItem xs={10} lg={10} md={10} style={{ paddingLeft: 0 }}>
                   <h4 className={classes.cardTitleWhite}>

@@ -93,6 +93,12 @@ class PreventionControlElement extends React.PureComponent {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.openIndex) {
+      nextProps.getPreventionControlsAction(this.props.item.id);
+    }
+  }
+
   componentDidMount() {
     this.props.getPreventionControlsAction(this.props.item.id);
   }
@@ -143,7 +149,7 @@ class PreventionControlElement extends React.PureComponent {
                 onClick={this.togglePreventionControlModal}
               >
                 <AddIcon className={classes.extendedIcon} />
-                Create
+                Create Prevention Control
               </Button>
             </GridItem>
           </Grid>

@@ -69,7 +69,6 @@ class CreateFunctionModal extends React.PureComponent {
       this.props.onSubmit(submitState, this.props.selectedFunction.id);
     } else {
       submitState.ItemRID = this.props.selectedItem.id;
-      submitState.SubProjectRID = this.props.selectedItem.id;
       this.props.onSubmit(submitState);
     }
     this.props.handleClose();
