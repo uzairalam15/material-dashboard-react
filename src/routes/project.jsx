@@ -1,5 +1,6 @@
 import ProjectView from "views/Project/ProjectView.jsx";
 import ProjectDetailView from "views/Project/ProjectDetailView.jsx";
+import ProjectAnalysisView from "views/Project/ProjectAnalysisView.jsx";
 
 const ProjectsRoutes = [
   {
@@ -13,6 +14,12 @@ const ProjectsRoutes = [
     sidebarName: "projectDetails",
     navbarName: "projectDetails",
     component: ProjectDetailView
+  },
+  {
+    path: "/projectAnalysis",
+    sidebarName: "projectAnalysis",
+    navbarName: "projectAnalysis",
+    component: ProjectAnalysisView
   }
 ];
 

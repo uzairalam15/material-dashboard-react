@@ -6,7 +6,7 @@ export default class ErrorService {
   }
 
   error(err, dispatch) {
-    const errMessage = err.response.text;
+    const errMessage = err.response ? err.response.text : err.message;
     dispatch(setMessage({ color: "danger", message: errMessage }));
   }
   success(message, dispatch) {
