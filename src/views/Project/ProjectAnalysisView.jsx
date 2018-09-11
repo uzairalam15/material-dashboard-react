@@ -211,6 +211,7 @@ class Projects extends React.PureComponent {
             selectedProject={selectedProject}
             selectedItem={selectedItem}
             selectedNodeType={selectedNodeType}
+            selectedProject={selectedProject}
           />
         </GridItem>
       </Grid>

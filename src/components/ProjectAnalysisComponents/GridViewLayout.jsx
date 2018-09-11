@@ -62,17 +62,32 @@ class GridViewLayout extends React.PureComponent {
           borderRadius: 5
         }}
       >
-        <FunctionSelect />
+        <h4
+          style={{
+            marginTop: "8%",
+            fontSize: 20
+          }}
+        >
+          Name: {this.props.selectedProject.name}
+        </h4>
+        <h4
+          style={{
+            fontSize: 20
+          }}
+        >
+          Author: {this.props.selectedProject.author}
+        </h4>
       </div>,
       <div
         key={"3"}
         style={{
-          background: this.background,
+          background: "transparent",
           textAlign: "center",
-          borderRadius: 10
+          zIndex: 100,
+          borderRadius: 5
         }}
       >
-        <MacroGraph item={state.layout[2]} />
+        <FunctionSelect />
       </div>,
       <div
         key={"4"}
@@ -82,12 +97,7 @@ class GridViewLayout extends React.PureComponent {
           borderRadius: 10
         }}
       >
-        <FunctionGraph
-          item={state.layout[3]}
-          index={4}
-          changedItem={state.changedItem}
-          selectedItem={this.props.selectedItem}
-        />
+        <MacroGraph item={state.layout[3]} />
       </div>,
       <div
         key={"5"}
@@ -97,7 +107,22 @@ class GridViewLayout extends React.PureComponent {
           borderRadius: 10
         }}
       >
-        <DetailView item={state.layout[4]} />
+        <FunctionGraph
+          item={state.layout[4]}
+          index={4}
+          changedItem={state.changedItem}
+          selectedItem={this.props.selectedItem}
+        />
+      </div>,
+      <div
+        key={"6"}
+        style={{
+          background: this.background,
+          textAlign: "center",
+          borderRadius: 10
+        }}
+      >
+        <DetailView item={state.layout[5]} />
       </div>
     ];
     return doms;
@@ -108,19 +133,29 @@ class GridViewLayout extends React.PureComponent {
       {
         x: 0,
         y: 0,
-        w: 1,
+        w: 0.7,
         h: 1,
         i: "1",
-        static: false,
+        static: true,
         isResizable: false
       },
       {
-        x: 1.5,
+        x: 0.7,
         y: 0,
-        w: 1,
+        w: 0.6,
         h: 1,
         i: "2",
         static: false,
+        isResizable: false,
+        isDraggable: false
+      },
+      {
+        x: 1.3,
+        y: 0,
+        w: 0.7,
+        h: 1,
+        i: "3",
+        static: true,
         isResizable: false
       },
       {
@@ -129,7 +164,7 @@ class GridViewLayout extends React.PureComponent {
         w: 2,
         h: 4,
         minH: 4,
-        i: "3",
+        i: "4",
         isResizable: true,
         isDraggable: false
       },
@@ -139,7 +174,7 @@ class GridViewLayout extends React.PureComponent {
         w: 1,
         h: props.selectedItem && props.selectedItem.id ? 3 : 1,
         minH: 2,
-        i: "4"
+        i: "5"
       },
       {
         x: 1,
@@ -148,7 +183,7 @@ class GridViewLayout extends React.PureComponent {
         h: props.selectedNodeType ? 3 : 1,
         minH: 2,
         minW: 1,
-        i: "5"
+        i: "6"
       }
     ];
     return layout;

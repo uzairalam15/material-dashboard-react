@@ -230,7 +230,7 @@ class Tree extends React.Component {
               this.echarts_react = e;
             }}
             option={this.getRadialOptions(this.state, this.props)}
-            style={{ height: item.h * 100, width: "100%" }}
+            style={{ height: item.h * 90, width: "100%" }}
             onEvents={onEvents}
           />
         ) : (
