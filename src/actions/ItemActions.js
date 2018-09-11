@@ -3,7 +3,9 @@ import {
   ADD_ITEM_SUCCESS,
   UPDATE_ITEM_SUCCESS,
   DELETE_ITEM_SUCCESS,
-  SET_SELECTED_ITEM
+  SET_SELECTED_ITEM,
+  SET_SELECTED_NODE,
+  SET_FUNCTION_DATA
 } from "constants/ItemTypes";
 import {
   getItems,
@@ -11,6 +13,12 @@ import {
   updateItem,
   deleteItem
 } from "sources/ItemSource";
+import { getAndPreprareData } from "sources/AnalysisSource";
+
+export const setFunctionData = data => ({
+  type: SET_FUNCTION_DATA,
+  data
+});
 
 export const getItemsSuccess = data => ({
   type: GET_ITEMS_SUCCESS,
@@ -27,9 +35,14 @@ export const deleteItemSuccess = id => ({
   id
 });
 
-export const setSelectedItem = id => ({
+export const setSelectedItem = data => ({
   type: SET_SELECTED_ITEM,
-  id
+  data
+});
+
+export const setSelectedNode = data => ({
+  type: SET_SELECTED_NODE,
+  data
 });
 
 export const updateItemSuccess = data => ({
@@ -37,6 +50,7 @@ export const updateItemSuccess = data => ({
   data
 });
 
+export const fetchAndPrepareData = id => getAndPreprareData(id);
 export const getItemsAction = id => getItems(id);
 export const createItemAction = data => createItem(data);
 export const updateItemAction = (data, id) => updateItem(data, id);

@@ -98,9 +98,13 @@ class Projects extends React.PureComponent {
     this.fetchProjects();
   }
 
-  fetchProjectDetail = item => {
+  fetchProjectDetail = (item, analysis) => {
     this.props.setSelectedProject(item);
-    this.props.history.push("/projectDetails");
+    if (analysis) {
+      this.props.history.push("/projectAnalysis");
+    } else {
+      this.props.history.push("/projectDetails");
+    }
   };
 
   fetchProjects = () => {

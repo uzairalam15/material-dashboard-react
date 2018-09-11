@@ -44,9 +44,9 @@ class ProjectAnalysisContainer extends React.Component {
   }
 
   componentDidMount() {
-    // if (!this.props.selectedProgram) {
-    //   this.props.history.push("/programs");
-    // }
+    if (!this.props.selectedProgram) {
+      this.props.history.push("/programs");
+    }
   }
   componentDidUpdate(e) {
     if (e.history.location.pathname !== e.location.pathname) {
@@ -64,7 +64,7 @@ class ProjectAnalysisContainer extends React.Component {
             {...rest}
           />
           {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
-          <div className={classes.content}>
+          <div className={classes.content} style={{ padding: "0px 15px" }}>
             <div className={classes.container}>{switchRoutes}</div>
           </div>
           <Snackbar

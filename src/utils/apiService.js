@@ -26,10 +26,13 @@ export default class ApiService {
       .auth(authParams.user, authParams.password)
       .end(callback);
   }
-  get(url, callback) {
-    return this.request
-      .get(url)
-      .auth(authParams.user, authParams.password)
-      .end(callback);
+  get(url, callback, userEnd = true) {
+    if (userEnd) {
+      return this.request
+        .get(url)
+        .auth(authParams.user, authParams.password)
+        .end(callback);
+    }
+    return this.request.get(url).auth(authParams.user, authParams.password);
   }
 }

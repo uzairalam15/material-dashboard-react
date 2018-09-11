@@ -15,10 +15,10 @@ import {
 const ApiServiceInstance = new ApiService(true);
 const ErrorServiceInstance = new ErrorService();
 
-export const getInputs = id => {
+export const getInputs = (id, useThen) => {
   const urlObject = appUrls.INPUT.GETALL;
   return dispatch => {
-    ApiServiceInstance[urlObject.type](
+    return ApiServiceInstance[urlObject.type](
       urlObject.url.replace("{id}", id),
       (err, res) => {
         if (!err) {
@@ -27,7 +27,8 @@ export const getInputs = id => {
         } else {
           ErrorServiceInstance.error(err, dispatch);
         }
-      }
+      },
+      !useThen
     );
   };
 };

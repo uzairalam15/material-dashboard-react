@@ -23,5 +23,12 @@ export default {
     preventionControls: [],
     safetyRequirements: [],
     loader: false
+  },
+  projectAnalysisReducer: {
+    selectedItem: null,
+    selectedNode: null,
+    selectedNodeType: "",
+    loader: false,
+    functionData: {}
   }
 };

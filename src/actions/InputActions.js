@@ -37,7 +37,9 @@ export const updateInputSuccess = data => ({
   data
 });
 
-export const getInputsAction = id => getInputs(id);
+export const getInputsAction = (id, useThen) => {
+  return getInputs(id, useThen);
+};
 export const createInputAction = data => createInput(data);
 export const updateInputAction = (data, id) => updateInput(data, id);
 export const deleteInputAction = id => deleteInput(id);

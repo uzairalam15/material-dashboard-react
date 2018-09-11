@@ -27,6 +27,13 @@ class Tasks extends React.Component {
     const subProject = this.props.subProjects[index];
     this.props.deleteSubProject(subProject.id, this.props.item.id);
   };
+
+  fetchProjectDetailForAnalysis = e => {
+    const index = e.currentTarget.getAttribute("data-index");
+    const subProject = this.props.subProjects[index];
+    this.props.fetchProjectDetail(subProject, true);
+  };
+
   fetchProjectDetail = e => {
     const index = e.currentTarget.getAttribute("data-index");
     const subProject = this.props.subProjects[index];
@@ -52,6 +59,15 @@ class Tasks extends React.Component {
                     onClick={this.fetchProjectDetail}
                   >
                     Show Detail
+                  </Button>
+                  <Button
+                    variant="extendedFab"
+                    aria-label="delete"
+                    color="primary"
+                    data-index={index}
+                    onClick={this.fetchProjectDetailForAnalysis}
+                  >
+                    Show Analysis
                   </Button>
                   <Tooltip
                     id="tooltip-top"

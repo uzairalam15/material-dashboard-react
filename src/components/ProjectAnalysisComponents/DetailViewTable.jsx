@@ -11,7 +11,8 @@ import Paper from "@material-ui/core/Paper";
 const CustomTableCell = withStyles(theme => ({
   head: {
     backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white
+    color: theme.palette.common.white,
+    textAlign: "left"
   },
   body: {
     fontSize: 14
@@ -19,11 +20,6 @@ const CustomTableCell = withStyles(theme => ({
 }))(TableCell);
 
 const styles = theme => ({
-  root: {
-    width: "100%",
-    marginTop: theme.spacing.unit * 3,
-    overflowX: "auto"
-  },
   table: {
     minWidth: 700
   },
@@ -34,52 +30,43 @@ const styles = theme => ({
   }
 });
 
-let id = 0;
-function createData(name, calories, fat, carbs, protein) {
-  id += 1;
-  return { id, name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9)
-];
-
 function CustomizedTable(props) {
-  const { classes } = props;
+  const { classes, data, height } = props;
+  const PaperCustom = withStyles(theme => ({
+    root: {
+      width: "100%",
+      marginTop: theme.spacing.unit * 3,
+      overflowX: "auto",
+      overflowY: "scroll",
+      height: height - 20
+    }
+  }))(Paper);
 
   return (
-    <Paper className={classes.root}>
+    <PaperCustom className={classes.root}>
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <CustomTableCell>Dessert (100g serving)</CustomTableCell>
-            <CustomTableCell numeric>Calories</CustomTableCell>
-            <CustomTableCell numeric>Fat (g)</CustomTableCell>
-            <CustomTableCell numeric>Carbs (g)</CustomTableCell>
-            <CustomTableCell numeric>Protein (g)</CustomTableCell>
+            <CustomTableCell>Label</CustomTableCell>
+            <CustomTableCell numeric>Value</CustomTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map(row => {
+          {data.map(row => {
             return (
               <TableRow className={classes.row} key={row.id}>
                 <CustomTableCell component="th" scope="row">
-                  {row.name}
+                  {row.label}
                 </CustomTableCell>
-                <CustomTableCell numeric>{row.calories}</CustomTableCell>
-                <CustomTableCell numeric>{row.fat}</CustomTableCell>
-                <CustomTableCell numeric>{row.carbs}</CustomTableCell>
-                <CustomTableCell numeric>{row.protein}</CustomTableCell>
+                <CustomTableCell component="th" scope="row">
+                  {row.value}
+                </CustomTableCell>
               </TableRow>
             );
           })}
         </TableBody>
       </Table>
-    </Paper>
+    </PaperCustom>
   );
 }
 

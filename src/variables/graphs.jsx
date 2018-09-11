@@ -1,5 +1,5 @@
 export const vertex = {
-  functon: "Function",
+  function: "Function",
   input: "Input",
   output: "Output",
   failureMode: "Failure Mode",

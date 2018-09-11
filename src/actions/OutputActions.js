@@ -37,7 +37,7 @@ export const updateOutputSuccess = data => ({
   data
 });
 
-export const getOutputsAction = id => getOutputs(id);
+export const getOutputsAction = (id, useThen) => getOutputs(id, useThen);
 export const createOutputAction = data => createOutput(data);
 export const updateOutputAction = (data, id) => updateOutput(data, id);
 export const deleteOutputAction = id => deleteOutput(id);

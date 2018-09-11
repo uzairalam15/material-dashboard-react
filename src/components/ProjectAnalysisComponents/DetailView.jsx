@@ -9,6 +9,7 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Grid from "@material-ui/core/Grid";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import Button from "@material-ui/core/Button";
@@ -31,6 +32,9 @@ import {
 } from "actions/InputActions";
 
 const styles = theme => ({
+  grid: {
+    padding: "0px !important"
+  },
   button: {
     margin: theme.spacing.unit,
     background: "transparent"
@@ -56,7 +60,7 @@ const styles = theme => ({
   },
   cardTitleWhite: {
     textAlign: "left",
-    color: "#FFFFFF",
+    color: "black",
     marginTop: "0px",
     minHeight: "auto",
     fontWeight: "300",
@@ -74,7 +78,7 @@ const styles = theme => ({
     padding: "0px !important"
   },
   expansionContent: {
-    margin: "0px 0px"
+    margin: "0px 0px !important"
   },
   expansionExpandIcon: {
     zIndex: 1000,
@@ -83,6 +87,9 @@ const styles = theme => ({
   },
   expansionDetailRoot: {
     padding: 0
+  },
+  container: {
+    height: "100%"
   }
 });
 
@@ -90,108 +97,76 @@ class DetailView extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      open: true,
-      modal: false,
-      functionId: "",
-      modalMode: "create",
-      selectedInput: {}
+      open: true
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.openIndex !== nextProps.openIndex) {
-      this.setState({
-        open: false,
-        functionId: null,
-        modal: false
-      });
-    }
-  }
+  componentWillReceiveProps(nextProps) {}
 
-  toggleRow = () => {
-    this.setState({
-      open: !this.state.open
+  getPreParedData = node => {
+    let data = [];
+    Object.keys(node).forEach(nodeKey => {
+      if (node[nodeKey] && !Array.isArray(node[nodeKey])) {
+        data.push({
+          label: nodeKey,
+          value: node[nodeKey]
+        });
+      }
     });
-  };
-
-  getFunctionItems = functions => {
-    return functions.map(functionItem => {
-      return (
-        <MenuItem value={functionItem.id}>
-          {functionItem.id}-{functionItem.name}
-        </MenuItem>
-      );
-    });
-  };
-
-  handleChange = event => {
-    const value = event.target.value;
-    if (this.state.functionId !== value && value) {
-      this.props.getInputsAction(value);
-    }
-    this.setState({
-      functionId: value
-    });
-  };
-
-  toggleInputModal = (e, mode = "create", inputItem = {}) => {
-    if (this.state.functionId) {
-      this.setState({
-        modal: !this.state.modal,
-        modalMode: mode,
-        selectedInput: inputItem
-      });
-    }
-  };
-
-  populateInputAction = () => {
-    if (this.state.modalMode === "create") {
-      return this.props.createInputAction;
-    }
-    return this.props.updateInputAction;
+    return data;
   };
 
   render() {
-    const { classes, item, inputs, functions } = this.props;
+    const { classes, selectedNode, selectedNodeType, item } = this.props;
     const { open } = this.state;
+    const height = item.h * 80 + (item.h - 1) * 20;
     return (
-      <Grid container>
-        <GridItem xs={12} sm={12} md={12} classes={classes}>
-          <ExpansionPanel expanded={open}>
-            <ExpansionPanelSummary
-              classes={{
-                content: classes.expansionContent
+      <div style={{ height: "100%" }}>
+        <Grid container classes={{ container: classes.container }}>
+          <GridItem xs={12} sm={12} md={12} classes={{ grid: classes.grid }}>
+            <Card
+              style={{
+                height: selectedNode && selectedNode.id ? "95%" : "85%"
               }}
-              style={{ padding: 0, margin: 0 }}
-              IconButtonProps={{ style: { zIndex: 1000 } }}
+              classes={{ root: classes.container }}
             >
-              <CardHeader style={{ width: "100%", margin: 6 }} color="info">
-                <Grid container>
-                  <GridItem xs={12} lg={12} md={12} style={{ paddingLeft: 0 }}>
-                    <h4 className={classes.cardTitleWhite}>Detail View</h4>
-                    <p className={classes.cardCategoryWhite}>
-                      Selected element and its metadata
-                    </p>
-                  </GridItem>
-                </Grid>
+              <CardHeader
+                color="primary"
+                style={{
+                  background: "whitesmoke",
+                  boxShadow: "0 1px 5px 0 rgba(0, 0, 0,0.3)"
+                }}
+              >
+                <h4 className={classes.cardTitleWhite}>Detail View</h4>
               </CardHeader>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails
-              classes={{
-                root: classes.expansionDetailRoot
-              }}
-            >
-              <CardBody style={{ padding: 0, paddingBottom: 25 }}>
+              <CardBody>
                 <Grid container>
-                  <GridItem xs={12} lg={12} md={12}>
-                    <DetailViewTable />
+                  <GridItem
+                    xs={12}
+                    sm={12}
+                    md={12}
+                    style={{ padding: "0px !important" }}
+                  >
+                    <div>
+                      {selectedNode && selectedNode.id ? (
+                        <React.Fragment>
+                          <p>NodeType: {selectedNodeType}</p>
+                          <DetailViewTable
+                            height={height}
+                            data={this.getPreParedData(selectedNode)}
+                          />
+                        </React.Fragment>
+                      ) : (
+                        <h6>Select Any Node to View Detail Data</h6>
+                      )}
+                    </div>
                   </GridItem>
                 </Grid>
               </CardBody>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-        </GridItem>
-      </Grid>
+            </Card>
+          </GridItem>
+        </Grid>
+      </div>
     );
   }
 }
@@ -201,16 +176,11 @@ DetailView.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  inputs: state.projectDetailReducer.inputs,
-  functions: state.projectDetailReducer.functions
+  selectedNodeType: state.projectAnalysisReducer.selectedNodeType,
+  selectedNode: state.projectAnalysisReducer.selectedNode
 });
 
 export default connect(
   mapStateToProps,
-  {
-    getInputsAction,
-    createInputAction,
-    updateInputAction,
-    deleteInputAction
-  }
+  {}
 )(withStyles(styles)(DetailView));

@@ -23,16 +23,11 @@ import { capitalizeFirstLetter } from "utils/helpers";
 
 //actions
 import {
-  getProjectsAction,
-  createProjectAction,
-  updateProjectAction,
-  deleteProjectAction,
-  getSubProjectsAction,
-  createSubProjectAction,
-  updateSubProjectAction,
-  deleteSubProjectAction,
-  setSelectedProject
-} from "actions/ProjectActions";
+  getItemsAction,
+  createItemAction,
+  updateItemAction,
+  deleteItemAction
+} from "actions/ItemActions";
 
 import { clearProject } from "actions/SharedActions";
 
@@ -93,6 +88,14 @@ class Projects extends React.PureComponent {
       selectedSubProject: {}
     };
   }
+
+  componentDidMount() {
+    this.fetchItems();
+  }
+
+  fetchItems = () => {
+    this.props.getItemsAction(this.props.selectedProject.id);
+  };
 
   // componentDidMount() {
   //   this.props.clearProject();
@@ -192,11 +195,23 @@ class Projects extends React.PureComponent {
   // };
 
   render() {
-    const { classes, projects } = this.props;
+    const {
+      classes,
+      projects,
+      items,
+      selectedProject,
+      selectedItem,
+      selectedNodeType
+    } = this.props;
     return (
       <Grid container>
         <GridItem xs={12} sm={12} md={12}>
-          <GridViewLayout />
+          <GridViewLayout
+            items={items}
+            selectedProject={selectedProject}
+            selectedItem={selectedItem}
+            selectedNodeType={selectedNodeType}
+          />
         </GridItem>
       </Grid>
     );
@@ -204,22 +219,15 @@ class Projects extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
-  projects: state.projectReducer.projects,
-  selectedProgram: state.programReducer.selectedProgram
+  selectedItem: state.projectAnalysisReducer.selectedItem,
+  selectedNodeType: state.projectAnalysisReducer.selectedNodeType,
+  items: state.projectDetailReducer.items,
+  selectedProject: state.projectReducer.selectedProject
 });
 
 export default connect(
   mapStateToProps,
   {
-    getProjectsAction,
-    createProjectAction,
-    updateProjectAction,
-    deleteProjectAction,
-    getSubProjectsAction,
-    createSubProjectAction,
-    updateSubProjectAction,
-    deleteSubProjectAction,
-    setSelectedProject,
-    clearProject
+    getItemsAction
   }
 )(withRouter(withStyles(styles)(Projects)));

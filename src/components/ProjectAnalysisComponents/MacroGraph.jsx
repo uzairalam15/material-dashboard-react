@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -21,6 +22,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import { preparedGraphData } from "utils/helpers";
+import { setSelectedNode } from "actions/ItemActions";
 
 const styles = theme => ({
   root: {
@@ -36,7 +39,7 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 2
   },
   cardTitleWhite: {
-    color: "#FFFFFF",
+    color: "black",
     marginTop: "0px",
     minHeight: "auto",
     fontWeight: "300",
@@ -56,6 +59,19 @@ class FullGraph extends React.Component {
       subModal: false,
       selectedNode: ""
     };
+    this.graphData = { nodes: [], links: [] };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (
+      this.props.functionData !== nextProps.functionData &&
+      nextProps.selectedNode
+    ) {
+      this.graphData = preparedGraphData(
+        nextProps.functionData,
+        nextProps.selectedNode
+      );
+    }
   }
 
   closeModal = () => {
@@ -141,8 +157,8 @@ class FullGraph extends React.Component {
               formatter: "{c}"
             }
           },
-          data: graphFlow.nodes,
-          links: graphFlow.links,
+          data: this.graphData.nodes,
+          links: this.graphData.links,
           categories: this.getCategories(vertex),
           focusNodeAdjacency: true,
           roam: true,
@@ -173,9 +189,9 @@ class FullGraph extends React.Component {
   onChartClick = params => {
     console.log(params);
     if (params.dataType === "node") {
-      this.setState({
-        subModal: true,
-        selectedNode: params.name
+      this.props.setSelectedNode({
+        node: params.data.node,
+        type: params.data.category
       });
     }
   };
@@ -184,21 +200,27 @@ class FullGraph extends React.Component {
     let onEvents = {
       click: this.onChartClick
     };
-
+    console.log("graph data", this.graphData);
     const { classes } = this.props;
     return (
-      <div>
-        <Grid container>
+      <div style={{ height: "100%" }}>
+        <Grid container style={{ height: "100%" }}>
           <GridItem
             xs={12}
             sm={12}
             md={12}
             classes={{ grid: { padding: "0px" } }}
           >
-            <Card>
-              <CardHeader color="primary">
+            <Card style={{ height: "92%" }}>
+              <CardHeader
+                color="primary"
+                style={{
+                  background: "whitesmoke",
+                  boxShadow: "0 1px 5px 0 rgba(0, 0, 0,0.3)"
+                }}
+              >
                 <h4 className={classes.cardTitleWhite}>
-                  Spread And Radial Representation
+                  Detail FMEA Info Graph
                 </h4>
               </CardHeader>
               <CardBody>
@@ -209,12 +231,13 @@ class FullGraph extends React.Component {
                     md={12}
                     style={{ padding: "0px !important" }}
                   >
-                    <div>
-                      <Grid container>
-                        <GridItem xs={12} sm={12} md={6} />
-                        <GridItem xs={12} sm={12} md={6}>
-                          <form className={classes.root} autoComplete="off">
-                            <FormControl className={classes.formControl}>
+                    {this.props.selectedNode ? (
+                      <div>
+                        <Grid container>
+                          <GridItem xs={12} sm={12} md={6} />
+                          <GridItem xs={12} sm={12} md={6}>
+                            <form className={classes.root} autoComplete="off">
+                              {/* <FormControl className={classes.formControl}>
                               <InputLabel htmlFor="type">
                                 Edge Curveness
                               </InputLabel>
@@ -223,30 +246,38 @@ class FullGraph extends React.Component {
                                 name="curveness"
                                 onChange={this.handleChange}
                               />
-                            </FormControl>
-                            <FormControl className={classes.formControl}>
-                              <InputLabel htmlFor="type">Type</InputLabel>
-                              <Select
-                                name="type"
-                                value={this.state.type}
-                                onChange={this.handleChange}
-                              >
-                                <MenuItem value={"force"}>Normal</MenuItem>
-                                <MenuItem value={"circular"}>Circular</MenuItem>
-                              </Select>
-                            </FormControl>
-                          </form>
-                        </GridItem>
-                      </Grid>
-                      <ReactEcharts
-                        option={this.getOption(this.state)}
-                        style={{
-                          height: this.props.item.h * 110,
-                          paddingTop: 0
-                        }}
-                        onEvents={onEvents}
-                      />
-                    </div>
+                            </FormControl> */}
+                              <FormControl className={classes.formControl}>
+                                <InputLabel htmlFor="type">Type</InputLabel>
+                                <Select
+                                  name="type"
+                                  value={this.state.type}
+                                  onChange={this.handleChange}
+                                >
+                                  <MenuItem value={"force"}>Normal</MenuItem>
+                                  <MenuItem value={"circular"}>
+                                    Circular
+                                  </MenuItem>
+                                </Select>
+                              </FormControl>
+                            </form>
+                          </GridItem>
+                        </Grid>
+                        <ReactEcharts
+                          option={this.getOption(this.state)}
+                          showLoading={this.props.loader}
+                          style={{
+                            height: this.props.item.h * 110,
+                            paddingTop: 0
+                          }}
+                          onEvents={onEvents}
+                        />
+                      </div>
+                    ) : (
+                      <h6>
+                        Please Select Function To View Detail Graphical View
+                      </h6>
+                    )}
                   </GridItem>
                 </Grid>
               </CardBody>
@@ -258,4 +289,13 @@ class FullGraph extends React.Component {
   }
 }
 
-export default withRouter(withStyles(styles)(FullGraph));
+const mapStateToProps = state => ({
+  functionData: state.projectAnalysisReducer.functionData,
+  selectedNode: state.projectAnalysisReducer.selectedNode,
+  loader: state.projectAnalysisReducer.loader
+});
+
+export default connect(
+  mapStateToProps,
+  { setSelectedNode }
+)(withRouter(withStyles(styles)(FullGraph)));
