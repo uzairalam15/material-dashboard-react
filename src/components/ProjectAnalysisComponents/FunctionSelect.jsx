@@ -55,9 +55,17 @@ class ItemSelect extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (
-      this.state.selectedOption &&
-      this.state.selectedOption.id !== nextProps.selectedNode.id
+      nextProps.selectedNode &&
+      nextProps.selectedNode.id &&
+      nextProps.selectedNodeType.toLowerCase() === "function"
     ) {
+      this.setState({
+        selectedOption: {
+          value: nextProps.selectedNode.id,
+          label: nextProps.selectedNode.name
+        }
+      });
+    } else {
       this.setState({
         selectedOption: null
       });
@@ -71,13 +79,14 @@ class ItemSelect extends React.Component {
   };
 
   handleChange = selectedOption => {
-    this.props.setSelectedNode({
-      type: "Function",
-      node: getObjectOfId(this.props.functions, selectedOption.value)
-    });
-    this.props.fetchAndPrepareData(selectedOption.value);
-    this.setState({ selectedOption });
     console.log(`Option selected:`, selectedOption);
+    if (selectedOption && selectedOption.value) {
+      this.props.setSelectedNode({
+        type: "Function",
+        node: getObjectOfId(this.props.functions, selectedOption.value)
+      });
+      this.props.fetchAndPrepareData(selectedOption.value);
+    }
   };
 
   render() {
@@ -126,7 +135,8 @@ class ItemSelect extends React.Component {
 
 const mapStateToProps = state => ({
   functions: state.projectDetailReducer.functions,
-  selectedNode: state.projectAnalysisReducer.selectedNode
+  selectedNode: state.projectAnalysisReducer.selectedNode,
+  selectedNodeType: state.projectAnalysisReducer.selectedNodeType
 });
 
 export default connect(
